@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FirstPayHK 第一份人工 — Your first paycheck, planned</title>
+<meta name="description" content="香港大學生第一份人工規劃器：計淨收入、MPF、薪俸稅、應急金跑道、防騙護盾、投資自己。For final-year HK students facing their first salary.">
+<style>
+:root{
+  --bg:#0b1526; --bg2:#101d33; --card:#16263f; --card2:#1c3050;
+  --ink:#eef3fa; --ink2:#a7b8cf; --ink3:#6b7f9c;
+  --gold:#f5c451; --gold2:#c99a2e; --mint:#3ddc97; --red:#ff6b6b; --blue:#5aa7ff; --violet:#a78bfa;
+  --line:#24395a; --shadow:0 8px 24px rgba(0,0,0,.35);
+  --r:16px; font-size:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang HK","Microsoft JhengHei",sans-serif;background:linear-gradient(180deg,var(--bg) 0%,#0d1a2f 40%,#0b1526 100%);color:var(--ink);min-height:100vh;line-height:1.55}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 90px}
+
+/* ── Header ─────────────────────────────── */
+header{position:sticky;top:0;z-index:50;background:rgba(11,21,38,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.hbar{max-width:760px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#e8a92e);display:flex;align-items:center;justify-content:center;font-weight:800;color:#1a1205;font-size:15px;flex:none}
+.brand{font-weight:800;font-size:17px;letter-spacing:.2px}
+.brand small{display:block;font-weight:600;font-size:10.5px;color:var(--ink3);letter-spacing:.6px}
+.hspacer{flex:1}
+.langbtn{background:var(--card);border:1px solid var(--line);color:var(--ink);font-size:12.5px;font-weight:700;padding:6px 11px;border-radius:999px;cursor:pointer}
+.langbtn:active{transform:scale(.96)}
+
+/* ── Nav chips ──────────────────────────── */
+nav{display:flex;gap:8px;overflow-x:auto;padding:10px 16px 12px;max-width:760px;margin:0 auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+.chip{flex:none;background:var(--card);border:1px solid var(--line);color:var(--ink2);font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;cursor:pointer;white-space:nowrap;transition:.15s}
+.chip .ico{margin-right:5px}
+.chip.on{background:linear-gradient(135deg,var(--gold),#e8a92e);color:#1a1205;border-color:transparent}
+
+/* ── Screens ────────────────────────────── */
+.screen{display:none;animation:fade .25s ease}
+.screen.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.hero{padding:26px 4px 10px}
+.hero h1{font-size:clamp(24px,6vw,34px);font-weight:800;line-height:1.25}
+.hero h1 .gd{color:var(--gold)}
+.hero p{color:var(--ink2);margin-top:8px;font-size:15px;max-width:620px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.badge{font-size:11.5px;font-weight:700;color:var(--ink2);background:var(--card);border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.badge b{color:var(--mint)}
+
+/* ── Cards ──────────────────────────────── */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin:14px 0;box-shadow:var(--shadow)}
+.card h2{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}
+.card h2 .n{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--gold),#e8a92e);color:#1a1205;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex:none}
+.card .sub{color:var(--ink2);font-size:13px;margin-top:4px}
+.lbl{font-size:13px;font-weight:700;color:var(--ink2);margin:14px 0 6px;display:block}
+input[type=text],input[type=number],select,textarea{width:100%;background:var(--bg2);border:1.5px solid var(--line);color:var(--ink);border-radius:12px;padding:11px 13px;font-size:15px;font-family:inherit;outline:none;transition:.15s}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+textarea{min-height:110px;resize:vertical;line-height:1.5}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23a7b8cf' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.preset{font-size:12px;font-weight:700;color:var(--gold);background:rgba(245,196,81,.1);border:1px solid rgba(245,196,81,.35);padding:6px 11px;border-radius:999px;cursor:pointer}
+.preset:active{transform:scale(.96)}
+
+/* ── Buttons ────────────────────────────── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--gold),#e8a92e);color:#1a1205;font-weight:800;font-size:15px;border:none;border-radius:12px;padding:13px 22px;cursor:pointer;box-shadow:0 4px 14px rgba(245,196,81,.25);transition:.15s}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:var(--card2);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn.small{padding:8px 14px;font-size:13px;border-radius:10px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* ── Payslip ────────────────────────────── */
+.payslip{background:linear-gradient(135deg,#13253f,#0f1d33);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:16px}
+.sliprow{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px dashed rgba(255,255,255,.07);font-size:14px}
+.sliprow:last-child{border-bottom:none}
+.sliprow .k{color:var(--ink2)}
+.sliprow .v{font-weight:700;font-variant-numeric:tabular-nums}
+.sliprow .v.neg{color:var(--red)}
+.sliprow.total{border-top:1.5px solid var(--gold2);border-bottom:none;margin-top:6px;padding-top:12px}
+.sliprow.total .v{color:var(--gold);font-size:22px;font-weight:800}
+.note{font-size:12px;color:var(--ink3);margin-top:10px;line-height:1.5}
+.note a{color:var(--blue)}
+
+/* ── Budget bars ────────────────────────── */
+.buckets{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px}
+@media(max-width:520px){.buckets{grid-template-columns:1fr}}
+.bucket{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:14px}
+.bucket .bk{font-size:12.5px;font-weight:800;display:flex;align-items:center;gap:6px}
+.bucket .bv{font-size:24px;font-weight:800;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.bucket .bp{font-size:11.5px;color:var(--ink3)}
+.bucket.warn{border-color:rgba(255,107,107,.5)}
+.rangewrap{margin-top:14px}
+.rangeline{display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);margin-bottom:4px}
+input[type=range]{width:100%;accent-color:var(--gold);height:34px}
+.hint{font-size:12.5px;color:var(--ink3);margin-top:6px;line-height:1.5}
+
+/* ── Runway ─────────────────────────────── */
+.bignum{font-size:52px;font-weight:800;color:var(--gold);line-height:1;font-variant-numeric:tabular-nums}
+.bignum small{font-size:16px;color:var(--ink2);font-weight:700}
+.subnum{color:var(--ink2);font-size:13.5px;margin-top:6px}
+canvas{width:100%;height:auto;display:block}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink2);margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+/* ── Scam shield ────────────────────────── */
+.riskhead{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.riskring{width:74px;height:74px;flex:none}
+.riskring circle{fill:none;stroke-width:7;stroke-linecap:round}
+.riskring .bgc{stroke:var(--line)}
+.riskring .fgc{transition:stroke-dashoffset .8s ease}
+.risknum{font-size:26px;font-weight:800;text-anchor:middle;dominant-baseline:central}
+.risktitle{font-size:19px;font-weight:800}
+.risksub{font-size:13px;color:var(--ink2)}
+.typetag{display:inline-block;font-size:12px;font-weight:800;padding:4px 10px;border-radius:999px;margin:4px 6px 4px 0}
+.flags{margin-top:12px}
+.flag{background:rgba(255,107,107,.09);border:1px solid rgba(255,107,107,.3);border-left:3px solid var(--red);border-radius:10px;padding:10px 12px;margin:8px 0;font-size:13.5px}
+.flag b{display:block;font-size:12px;letter-spacing:.4px;margin-bottom:3px;color:var(--red)}
+.flag .q{color:var(--ink);background:rgba(255,107,107,.12);padding:1px 5px;border-radius:4px;font-style:italic}
+.flag.ok{background:rgba(61,220,151,.08);border-color:rgba(61,220,151,.3);border-left-color:var(--mint)}
+.flag.ok b{color:var(--mint)}
+.actions{margin-top:12px}
+.act{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;padding:7px 0;border-bottom:1px dashed rgba(255,255,255,.07)}
+.act:last-child{border-bottom:none}
+.act .ai{flex:none;width:22px;height:22px;border-radius:7px;background:rgba(245,196,81,.15);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.examples{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.hotline{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.hcard{flex:1;min-width:150px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px}
+.hcard b{display:block;font-size:15px;color:var(--gold)}
+.hcard span{font-size:12px;color:var(--ink2)}
+
+/* ── Grow ───────────────────────────────── */
+.growitem{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.growitem .gi-main{flex:1}
+.growitem .gi-t{font-weight:700;font-size:14.5px}
+.growitem .gi-m{font-size:12.5px;color:var(--ink2);margin-top:2px}
+.growitem .gi-r{text-align:right;flex:none}
+.growitem .gi-r b{color:var(--mint);font-size:16px}
+.growitem .gi-r span{display:block;font-size:11px;color:var(--ink3)}
+.del{background:none;border:none;color:var(--ink3);font-size:17px;cursor:pointer;padding:4px 6px}
+.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.stat{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:13px}
+.stat b{display:block;font-size:21px;color:var(--gold);font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--ink2)}
+
+/* ── Journey / dashboard ────────────────── */
+.ringwrap{display:flex;gap:18px;align-items:center;margin:6px 0 4px}
+.jring{width:110px;height:110px;flex:none}
+.jring circle{fill:none;stroke-width:9}
+.jring .jbg{stroke:var(--line)}
+.jring .jfg{stroke:url(#jgrad);stroke-linecap:round;transition:stroke-dashoffset 1s ease}
+.jnum{font-size:23px;font-weight:800;text-anchor:middle;dominant-baseline:central}
+.jdays{flex:1}
+.jdays .jt{font-size:14px;font-weight:700;padding:5px 0;display:flex;justify-content:space-between;color:var(--ink2)}
+.jdays .jt.done{color:var(--mint)}
+.jdays .jt.now{color:var(--gold)}
+.milestones{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+@media(max-width:520px){.milestones{grid-template-columns:1fr}}
+.ms{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;gap:10px;align-items:flex-start}
+.ms .mi{flex:none;width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;background:var(--card2);border:1px solid var(--line)}
+.ms.done .mi{background:rgba(61,220,151,.15);border-color:rgba(61,220,151,.4)}
+.ms b{font-size:13.5px;display:block}
+.ms span{font-size:12px;color:var(--ink2)}
+.quest{background:linear-gradient(135deg,rgba(245,196,81,.12),rgba(245,196,81,.04));border:1px solid rgba(245,196,81,.35);border-radius:12px;padding:12px 14px;margin:10px 0;display:flex;gap:12px;align-items:center}
+.quest .qq{flex:1}
+.quest b{font-size:13.5px}
+.quest span{display:block;font-size:12px;color:var(--ink2)}
+.questbtn{flex:none;background:var(--gold);color:#1a1205;border:none;font-weight:800;font-size:12.5px;padding:8px 13px;border-radius:9px;cursor:pointer}
+.questbtn:disabled{opacity:.4}
+
+/* ── Footer / misc ──────────────────────── */
+.footnav{position:fixed;bottom:0;left:0;right:0;z-index:60;background:rgba(11,21,38,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+.footnav .fin{max-width:760px;margin:0 auto;display:flex}
+.fbtn{flex:1;background:none;border:none;color:var(--ink3);font-size:10.5px;font-weight:700;padding:8px 4px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px}
+.fbtn .fi{font-size:19px;line-height:1}
+.fbtn.on{color:var(--gold)}
+.hidden{display:none!important}
+.toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(20px);background:var(--card2);border:1px solid var(--gold2);color:var(--ink);font-size:13.5px;font-weight:600;padding:10px 18px;border-radius:999px;opacity:0;transition:.3s;z-index:99;pointer-events:none;white-space:nowrap;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.demo-bar{background:rgba(245,196,81,.12);border:1px dashed rgba(245,196,81,.4);border-radius:12px;padding:10px 14px;margin:12px 0;font-size:12.5px;color:var(--gold);display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.dataline{font-size:12px;color:var(--ink3);border-top:1px dashed var(--line);margin-top:14px;padding-top:10px;line-height:1.6}
+.dataline b{color:var(--ink2)}
+h3.sec{font-size:14px;font-weight:800;color:var(--gold);letter-spacing:.5px;margin:20px 0 8px;text-transform:uppercase}
+</style>
+</head>

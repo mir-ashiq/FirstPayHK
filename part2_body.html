@@ -1,0 +1,282 @@
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<linearGradient id="jgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5c451"/><stop offset="1" stop-color="#3ddc97"/></linearGradient>
+</defs></svg>
+
+<header>
+  <div class="hbar">
+    <div class="logo">$1</div>
+    <div class="brand" id="brandTitle">FirstPayHK<small id="brandSub">第一份人工・規劃你的 90 天</small></div>
+    <div class="hspacer"></div>
+    <button class="langbtn" id="langBtn" onclick="toggleLang()">EN</button>
+  </div>
+  <nav id="navChips">
+    <div class="chip on" data-s="home" onclick="go('home')"><span class="ico">🏠</span><span class="ct">主頁</span></div>
+    <div class="chip" data-s="pay" onclick="go('pay')"><span class="ico">💰</span><span class="ct">人工</span></div>
+    <div class="chip" data-s="runway" onclick="go('runway')"><span class="ico">🛡️</span><span class="ct">跑道</span></div>
+    <div class="chip" data-s="shield" onclick="go('shield')"><span class="ico">🚨</span><span class="ct">防騙</span></div>
+    <div class="chip" data-s="grow" onclick="go('grow')"><span class="ico">🌱</span><span class="ct">成長</span></div>
+  </nav>
+</header>
+
+<div class="wrap">
+
+<!-- ═══════════ HOME ═══════════ -->
+<section class="screen on" id="s-home">
+  <div class="hero">
+    <h1 id="t_hero">你的<strong class="gd">第一份人工</strong>，唔使驚。</h1>
+    <p id="t_heroSub">三個月後你會收到第一份糧。FirstPayHK 帶你行一次 90 天旅程：計淨收入、儲應急金、識破騙局、投資自己。全部數字根據香港真實規則。</p>
+    <div class="badges" id="heroBadges">
+      <span class="badge">📊 <b>MPF＋薪俸稅</b> 真實計算</span>
+      <span class="badge">🛡️ <b>應急金跑道</b> 視覺化</span>
+      <span class="badge">🚨 <b>防騙護盾</b> 即時檢測</span>
+      <span class="badge">🌱 <b>投資自己</b> 台賬</span>
+    </div>
+  </div>
+
+  <div class="demo-bar">
+    <span id="t_demoNote">🧪 示範模式：已載入虛構用戶「阿芝」的 90 天旅程（合成數據）</span>
+    <button class="btn ghost small" id="resetBtn" onclick="resetDemo()">↺ <span id="t_reset">重設</span></button>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">1</span><span id="t_journeyTitle">阿芝的 90 天旅程</span></h2>
+    <div class="sub" id="t_journeySub">22 歲・應屆畢業生・第一份工 HK$21,000/月（示範數據）</div>
+    <div class="ringwrap">
+      <svg class="jring" viewBox="0 0 120 120">
+        <circle class="jbg" cx="60" cy="60" r="50"></circle>
+        <circle class="jfg" id="jringFg" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314" transform="rotate(-90 60 60)"></circle>
+        <text class="jnum" id="jringNum" fill="#f5c451" x="60" y="60">D0</text>
+      </svg>
+      <div class="jdays">
+        <div class="jt done" id="jt1"><span>D1–30 ・ 收第一份糧</span><span id="jt1v">✓</span></div>
+        <div class="jt" id="jt2"><span>D31–60 ・ 儲應急金</span><span id="jt2v"></span></div>
+        <div class="jt" id="jt3"><span>D61–90 ・ 投資自己</span><span id="jt3v"></span></div>
+      </div>
+    </div>
+    <div class="milestones">
+      <div class="ms" id="ms1"><div class="mi">💵</div><div><b id="ms1t">出糧日</b><span id="ms1s">了解你的淨收入</span></div></div>
+      <div class="ms" id="ms2"><div class="mi">⚖️</div><div><b id="ms2t">預算開支</b><span id="ms2s">分配三個錢桶</span></div></div>
+      <div class="ms" id="ms3"><div class="mi">🛡️</div><div><b id="ms3t">應急跑道</b><span id="ms3s">目標儲 3 個月</span></div></div>
+      <div class="ms" id="ms4"><div class="mi">🚨</div><div><b id="ms4t">防騙檢查</b><span id="ms4s">檢查可疑訊息</span></div></div>
+      <div class="ms" id="ms5"><div class="mi">🌱</div><div><b id="ms5t">投資自己</b><span id="ms5s">記錄成長投資</span></div></div>
+      <div class="ms" id="ms6"><div class="mi">🎯</div><div><b id="ms6t">90 天達標</b><span id="ms6s">完整走完旅程</span></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">⚡</span><span id="t_whyTitle">點解要 90 天？</span></h2>
+    <p class="sub" id="t_whyBody" style="margin-top:8px">香港 2025 年錄得 <b style="color:var(--gold)">43,212</b> 宗騙案，損失約 <b style="color:var(--gold)">HK$81 億</b>；應屆畢業生平均起薪 <b style="color:var(--gold)">HK$20,961</b>。頭 90 天的理財習慣，影響你之後十年。第一份糧，係你建立金錢習慣嘅唯一一次機會。</p>
+    <div style="margin-top:12px"><button class="btn" onclick="go('pay')">💰 <span id="t_startBtn">由第一份糧開始 →</span></button></div>
+  </div>
+
+  <div class="dataline" id="t_datasrc"><b>數據來源：</b>IRSD 薪俸稅率及免稅額 2025/26・積金局 MPF 供款規定・香港警方 ADCC 防騙統計 2025・HKU/JobsDB 畢業生薪酬調查。示範數據為虛構。</div>
+</section>
+
+<!-- ═══════════ PAY ═══════════ -->
+<section class="screen" id="s-pay">
+  <div class="hero"><h1 id="t_payTitle">💰 第一份糧，實收幾多？</h1>
+  <p id="t_paySub">輸入月薪，我哋按香港真實規則計 MPF 同薪俸稅，話你知真正落袋幾多。</p></div>
+
+  <div class="card">
+    <label class="lbl" id="t_grossLbl">月薪（港幣，未扣款）</label>
+    <input type="number" id="salaryIn" value="21000" min="0" step="500" oninput="computePay()">
+    <div class="presets">
+      <button class="preset" onclick="setSalary(21000)">畢業生平均 HK$20,961</button>
+      <button class="preset" onclick="setSalary(26000)">HKU 中位數 HK$26,000</button>
+      <button class="preset" onclick="setSalary(18000)">兼職轉全職 HK$18,000</button>
+    </div>
+
+    <div class="payslip" id="payslip">
+      <div class="sliprow"><span class="k" id="t_s_gross">月薪（毛收入）</span><span class="v" id="v_gross">—</span></div>
+      <div class="sliprow"><span class="k" id="t_s_mpf">MPF 僱員供款（5%）</span><span class="v neg" id="v_mpf">—</span></div>
+      <div class="sliprow"><span class="k" id="t_s_tax">薪俸稅（每月攤分）</span><span class="v neg" id="v_taxM">—</span></div>
+      <div class="sliprow"><span class="k" id="t_s_employer">＋ 僱主 MPF 供款（5%，另計）</span><span class="v" id="v_mpfEr" style="color:var(--mint)">—</span></div>
+      <div class="sliprow total"><span class="k" id="t_s_net">每月實收（大約）</span><span class="v" id="v_net">—</span></div>
+      <div class="note" id="t_s_note">計法：MPF 僱員供款 = 相關入息 5%（月入上限 HK$30,000，即最多 HK$1,500）；應課稅入息 = 年收入 − MPF 強制供款 − 基本免稅額 HK$132,000；累進稅階 2/6/10/14/17%，與標準稅率 15%（按扣除後入息）取低者。假設：無花紅、無其他扣除、單身非合併評稅。<a href="https://www.ird.gov.hk" target="_blank" rel="noopener">稅務局 ird.gov.hk</a></div>
+      <div class="note" id="t_s_worked" style="border:1px dashed var(--gold2);border-radius:10px;padding:10px 12px;margin-top:8px">✏️ <b>計算示例（月薪 HK$26,000）：</b>年收入 312,000 − MPF 15,600 − 免稅額 132,000 = 應課稅入息 164,400。稅階：50,000×2% + 50,000×6% + 50,000×10% + 14,400×14% = 1,000 + 3,000 + 5,000 + 2,016 = <b>HK$11,016/年（HK$918/月）</b>，低於標準稅率 44,460，故用累進制。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">⚖️</span><span id="t_allocTitle">三個錢桶 — 香港版</span></h2>
+    <div class="sub" id="t_allocSub">唔係美國 50/30/20。香港租金食人工 30–40%，我哋用香港畢業生真實開支分佈做起點，你可以自己拉。</div>
+    <div class="buckets">
+      <div class="bucket" id="bk1"><div class="bk" style="color:var(--blue)">🏠 <span id="t_bk1">必要開支</span></div><div class="bv" id="bv1">—</div><div class="bp" id="bp1">—</div><div class="hint" id="bh1"> rent·food·transport·bills</div></div>
+      <div class="bucket" id="bk2"><div class="bk" style="color:var(--violet)">🛍️ <span id="t_bk2">想要開支</span></div><div class="bv" id="bv2">—</div><div class="bp" id="bp2">—</div><div class="hint" id="bh2"> eating out·fun·shopping</div></div>
+      <div class="bucket" id="bk3"><div class="bk" style="color:var(--gold)">🛡️ <span id="t_bk3">未來儲備</span></div><div class="bv" id="bv3">—</div><div class="bp" id="bp3">—</div><div class="hint" id="bh3"> emergency fund·self-invest</div></div>
+    </div>
+    <div class="rangewrap">
+      <div class="rangeline"><span id="t_r_need">必要開支</span><b id="rv_need">—</b></div>
+      <input type="range" id="r_need" min="20" max="80" value="52" oninput="allocChanged()">
+      <div class="rangeline"><span id="t_r_want">想要開支</span><b id="rv_want">—</b></div>
+      <input type="range" id="r_want" min="5" max="50" value="23" oninput="allocChanged()">
+      <div class="hint" id="t_r_hint">💡 香港參考：必要 50–60%（含租金 30–40%）、想要 15–25%、未來 20–25%。如果「未來」低過 15%，畫面會提醒你。</div>
+    </div>
+    <div class="note" id="t_allocNote">示範起點（HK$21,000 實收）：必要 HK$9,600・想要 HK$4,200・未來 HK$4,500（按租金 HK$6,800 共住、伙食 HK$2,800、交通 HK$800 等估算，2025–26 學生生活成本調查）。</div>
+  </div>
+</section>
+
+<!-- ═══════════ RUNWAY ═══════════ -->
+<section class="screen" id="s-runway">
+  <div class="hero"><h1 id="t_runTitle">🛡️ 你可以冇工幾耐？</h1>
+  <p id="t_runSub">應急金 = 每月必要開支 × 3。呢個數字就係你嘅「人生跑道」。</p></div>
+
+  <div class="card">
+    <div class="bignum" id="runBig">— <small id="runUnit">個月</small></div>
+    <div class="subnum" id="runSub">—</div>
+    <canvas id="runCanvas" width="700" height="300" style="margin-top:12px"></canvas>
+    <div class="legend">
+      <span><i style="background:var(--gold)"></i><span id="t_lg_saved">已儲蓄</span></span>
+      <span><i style="background:var(--line)"></i><span id="t_lg_target">3 個月目標</span></span>
+      <span><i style="background:var(--mint)"></i><span id="t_lg_proj">每月儲蓄軌跡</span></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">🎛️</span><span id="t_simTitle">儲蓄模擬器</span></h2>
+    <div class="rangewrap">
+      <div class="rangeline"><span id="t_r_save">每月儲</span><b id="rv_save">—</b></div>
+      <input type="range" id="r_save" min="0" max="10000" step="500" value="4000" oninput="computeRunway()">
+      <div class="rangeline"><span id="t_r_start">現有儲蓄</span><b id="rv_start">—</b></div>
+      <input type="range" id="r_start" min="0" max="60000" step="1000" value="5000" oninput="computeRunway()">
+    </div>
+    <div class="subnum" id="simOut">—</div>
+    <div class="note" id="t_runNote">失業跑道 = 應急金 ÷ 每月必要開支。目標 3 個月係香港理財教育通用建議（積金局／投委會），穩健做法係 3–6 個月。呢個模擬唔包括失業保險或強積金累算權益。</div>
+    <div style="margin-top:12px"><button class="btn ghost small" onclick="shareRunway()">📤 <span id="t_share">分享我的跑道</span></button></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">🛍️</span><span id="t_dealsTitle">慳家指南 — 第一個月的學生優惠</span></h2>
+    <div class="sub" id="t_dealsSub">預算唔等於唔使錢，係使得聰明。香港學生優惠隨處都有，呢度係起步清單（優惠以官方平台為準）：</div>
+    <div id="dealsList" style="margin-top:10px"></div>
+    <div class="note" id="t_dealsNote">優惠資訊僅作教育示範，請以各官方渠道（包括 HKJetso 等優惠平台）的最新公佈為準。</div>
+  </div>
+</section>
+
+<!-- ═══════════ SHIELD ═══════════ -->
+<section class="screen" id="s-shield">
+  <div class="hero"><h1 id="t_shTitle">🚨 防騙護盾</h1>
+  <p id="t_shSub">收到可疑 SMS / WhatsApp？貼落嚟，即時分析。2025 年香港 43,212 宗騙案，網購詐騙最多（12,505 宗，28.9%）。學生係高危一群。</p></div>
+
+  <div class="card">
+    <label class="lbl" id="t_shLbl">貼上可疑訊息（唔好真係俾錢！）</label>
+    <textarea id="scamIn" oninput="liveShield()" placeholder="例如：【香港郵政】你的包裹因未付運費滯留，請於24小時內到 hkpost-pay.example 繳費 HK$2.5 …"></textarea>
+    <div class="examples">
+      <button class="preset" onclick="loadExample(0)">📧 網購／物流騙局</button>
+      <button class="preset" onclick="loadExample(1)">💼 刷單兼職騙局</button>
+      <button class="preset" onclick="loadExample(2)">📈 投資群組騙局</button>
+      <button class="preset" onclick="loadExample(3)">👮 冒充官員騙局</button>
+      <button class="preset" onclick="loadExample(4)">✅ 正常銀行 SMS</button>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" onclick="runShield()">🛡️ <span id="t_checkBtn">即時檢測</span></button>
+    </div>
+  </div>
+
+  <div class="card hidden" id="shieldOut">
+    <div class="riskhead">
+      <svg class="riskring" viewBox="0 0 80 80">
+        <circle class="bgc" cx="40" cy="40" r="33"></circle>
+        <circle class="fgc" id="riskArc" cx="40" cy="40" r="33" stroke-dasharray="207" stroke-dashoffset="207" transform="rotate(-90 40 40)"></circle>
+        <text class="risknum" id="riskNum" fill="#fff" x="40" y="40">0</text>
+      </svg>
+      <div>
+        <div class="risktitle" id="riskTitle">—</div>
+        <div class="risksub" id="riskSub">—</div>
+        <div id="typeTags"></div>
+      </div>
+    </div>
+    <div class="flags" id="flagList"></div>
+    <h3 class="sec" id="t_whatNow">下一步點做</h3>
+    <div class="actions" id="actList"></div>
+    <div class="hotline">
+      <div class="hcard"><b>18222</b><span id="t_hl1">反詐騙協調中心 ADCC（24 小時）</span></div>
+      <div class="hcard"><b>CyberDefender</b><span id="t_hl2">警方防騙視像器／資訊</span></div>
+      <div class="hcard"><b>「防騙視伏App」</b><span id="t_hl3">查可疑電話／戶口／網站</span></div>
+    </div>
+    <div class="note" id="t_shNote">⚠️ 本工具根據公開防騙指引嘅規則引擎做教育用途分析，唔係法律或專業意見，唔保證偵測所有騙局。有懷疑，一律先透過官方渠道核實。</div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">📖</span><span id="t_rulesTitle">透明規則 — 點解我哋全部公開</span></h2>
+    <p class="sub" id="t_rulesBody" style="margin-top:6px">市面上有啲「AI 檢測」係黑盒：俾個答案你，唔解釋。錢嘅問題上，黑盒信唔過。我哋嘅規則引擎每一條都列明來源同理由，100% 離線運作，訊息唔會離開你部手機。</p>
+    <div style="margin-top:10px"><button class="btn ghost small" onclick="go('rules')">📋 <span id="t_viewRules">查看全部 18 條規則 →</span></button></div>
+  </div>
+</section>
+
+<!-- ═══════════ RULES (sub-screen) ═══════════ -->
+<section class="screen" id="s-rules">
+  <div class="hero"><h1 id="t_rulesH">📋 防騙規則全集</h1>
+  <p id="t_rulesSubS">18 條規則・5 大騙局類型・每條都有理由同來源。</p></div>
+  <div id="rulesList"></div>
+  <div class="dataline" id="t_rulesSrc"><b>規則依據：</b>香港警方 ADCC 公佈騙案手法（2025–2026）・CyberDefender.hk 防騙指引・消委會網購安全提示。紅旗關鍵詞按已公佈案例整理。</div>
+</section>
+
+<!-- ═══════════ GROW ═══════════ -->
+<section class="screen" id="s-grow">
+  <div class="hero"><h1 id="t_growTitle">🌱 投資自己</h1>
+  <p id="t_growSub">回報最高嘅投資係你自己。記低每一筆技能投資，睇下幾時回本。</p></div>
+
+  <div class="card">
+    <h2><span class="n">＋</span><span id="t_addGrow">新增一筆自我投資</span></h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+      <div><label class="lbl" id="t_gi_name">項目</label><input type="text" id="giName" placeholder="例如：Excel 證書課程"></div>
+      <div><label class="lbl" id="t_gi_cost">成本（HK$）</label><input type="number" id="giCost" placeholder="2800" min="0"></div>
+      <div><label class="lbl" id="t_gi_gain">預期每月回報（HK$）</label><input type="number" id="giGain" placeholder="500" min="0"></div>
+      <div><label class="lbl" id="t_gi_cat">類型</label><select id="giCat"><option id="t_gc1" value="course">課程／證書</option><option id="t_gc2" value="side">副業成本</option><option id="t_gc3" value="tool">工具／設備</option><option id="t_gc4" value="health">健康</option></select></div>
+    </div>
+    <div style="margin-top:12px"><button class="btn" onclick="addGrow()">🌱 <span id="t_addBtn">加入台账</span></button></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">📒</span><span id="t_ledgerTitle">阿芝的成長台账</span></h2>
+    <div id="growList"></div>
+    <div class="statgrid">
+      <div class="stat"><b id="gs_total">—</b><span id="t_gs1">總投資</span></div>
+      <div class="stat"><b id="gs_pb">—</b><span id="t_gs2">平均回本期</span></div>
+      <div class="stat"><b id="gs_month">—</b><span id="t_gs3">預期每月回報</span></div>
+      <div class="stat"><b id="gs_vs">—</b><span id="t_gs4">佔每月實收</span></div>
+    </div>
+    <div class="note" id="t_growNote">「預期回報」係你自己嘅估計，FirstPayHK 唔作任何收入保證。呢個係成本記錄工具，唔係投資建議。真正嘅複利：技能 → 更高議價能力 → 更闊跑道。</div>
+  </div>
+</section>
+
+<!-- ═══════════ CHECK-IN (modal-style card on home) ═══════════ -->
+<section class="screen" id="s-checkin">
+  <div class="hero"><h1 id="t_ciTitle">📝 每週 Check-in</h1>
+  <p id="t_ciSub">90 日旅程入面，每個禮拜花 30 秒記低實際使費。習慣先係重點。</p></div>
+  <div class="card" id="ciCard">
+    <h2><span class="n">✍️</span><span id="t_ciFormTitle">今個星期使咗幾多？</span></h2>
+    <div class="rangewrap">
+      <div class="rangeline"><span id="t_ci_need">必要（實際）</span><b id="civ_need">—</b></div>
+      <input type="range" id="ci_need" min="0" max="15000" step="100" oninput="ciPreview()">
+      <div class="rangeline"><span id="t_ci_want">想要（實際）</span><b id="civ_want">—</b></div>
+      <input type="range" id="ci_want" min="0" max="8000" step="100" oninput="ciPreview()">
+    </div>
+    <div class="subnum" id="ciOut">—</div>
+    <div style="margin-top:12px"><button class="btn" onclick="saveCheckin()">💾 <span id="t_ciSave">記錄今週</span></button></div>
+  </div>
+  <div class="card">
+    <h2><span class="n">📈</span><span id="t_ciHist">記錄</span></h2>
+    <div id="ciHistory"></div>
+  </div>
+  <div class="card" id="questCard">
+    <h2><span class="n">🎯</span><span id="t_questTitle">本週任務</span></h2>
+    <div id="questList"></div>
+  </div>
+</section>
+
+</div><!-- /wrap -->
+
+<!-- ── Footer nav ── -->
+<div class="footnav"><div class="fin">
+  <button class="fbtn" data-s="home" onclick="go('home')"><span class="fi">🏠</span><span class="ft">主頁</span></button>
+  <button class="fbtn" data-s="pay" onclick="go('pay')"><span class="fi">💰</span><span class="ft">人工</span></button>
+  <button class="fbtn" data-s="runway" onclick="go('runway')"><span class="fi">🛡️</span><span class="ft">跑道</span></button>
+  <button class="fbtn" data-s="shield" onclick="go('shield')"><span class="fi">🚨</span><span class="ft">防騙</span></button>
+  <button class="fbtn" data-s="grow" onclick="go('grow')"><span class="fi">🌱</span><span class="ft">成長</span></button>
+  <button class="fbtn" data-s="checkin" onclick="go('checkin')"><span class="fi">📝</span><span class="ft">記錄</span></button>
+</div></div>
+
+<div class="toast" id="toast"></div>
