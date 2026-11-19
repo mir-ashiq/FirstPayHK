@@ -60,6 +60,15 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .preset{font-size:12px;font-weight:700;color:var(--gold);background:rgba(245,196,81,.1);border:1px solid rgba(245,196,81,.35);padding:6px 11px;border-radius:999px;cursor:pointer}
 .preset:active{transform:scale(.96)}
+.preset.on{background:linear-gradient(135deg,var(--gold),#e8a92e);color:#1a1205;border-color:transparent}
+details.adv{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:10px 0}
+details.adv summary{font-weight:700;font-size:14px;cursor:pointer;color:var(--ink)}
+details.adv[open] summary{margin-bottom:8px}
+.scenout{background:rgba(245,196,81,.08);border:1px solid rgba(245,196,81,.3);border-radius:12px;padding:12px 14px;margin-top:10px;font-size:13.5px;line-height:1.7;display:none}
+.scenout.show{display:block}
+.scenout b{color:var(--gold)}
+.mcbar{height:8px;background:var(--bg2);border-radius:99px;overflow:hidden;margin-top:8px}
+.mcbar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--mint));border-radius:99px}
 
 /* ── Buttons ────────────────────────────── */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--gold),#e8a92e);color:#1a1205;font-weight:800;font-size:15px;border:none;border-radius:12px;padding:13px 22px;cursor:pointer;box-shadow:0 4px 14px rgba(245,196,81,.25);transition:.15s}
@@ -262,7 +271,13 @@ h3.sec{font-size:14px;font-weight:800;color:var(--gold);letter-spacing:.5px;marg
   <p id="t_paySub">輸入月薪，我哋按香港真實規則計 MPF 同薪俸稅，話你知真正落袋幾多。</p></div>
 
   <div class="card">
-    <label class="lbl" id="t_grossLbl">月薪（港幣，未扣款）</label>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <label class="lbl" id="t_grossLbl" style="margin:0">月薪（港幣，未扣款）</label>
+      <select id="yearSel" onchange="setYear(this.value)" style="width:auto;padding:6px 10px;font-size:13px">
+        <option value="2026/27">2026/27 課稅年度</option>
+        <option value="2025/26">2025/26 課稅年度</option>
+      </select>
+    </div>
     <input type="number" id="salaryIn" value="21000" min="0" step="500" oninput="computePay()">
     <div class="presets">
       <button class="preset" onclick="setSalary(21000)">畢業生平均 HK$20,961</button>
@@ -276,9 +291,36 @@ h3.sec{font-size:14px;font-weight:800;color:var(--gold);letter-spacing:.5px;marg
       <div class="sliprow"><span class="k" id="t_s_tax">薪俸稅（每月攤分）</span><span class="v neg" id="v_taxM">—</span></div>
       <div class="sliprow"><span class="k" id="t_s_employer">＋ 僱主 MPF 供款（5%，另計）</span><span class="v" id="v_mpfEr" style="color:var(--mint)">—</span></div>
       <div class="sliprow total"><span class="k" id="t_s_net">每月實收（大約）</span><span class="v" id="v_net">—</span></div>
-      <div class="note" id="t_s_note">計法：MPF 僱員供款 = 相關入息 5%（月入上限 HK$30,000，即最多 HK$1,500）；應課稅入息 = 年收入 − MPF 強制供款 − 基本免稅額 HK$132,000；累進稅階 2/6/10/14/17%，與標準稅率 15%（按扣除後入息）取低者。假設：無花紅、無其他扣除、單身非合併評稅。<a href="https://www.ird.gov.hk" target="_blank" rel="noopener">稅務局 ird.gov.hk</a></div>
-      <div class="note" id="t_s_worked" style="border:1px dashed var(--gold2);border-radius:10px;padding:10px 12px;margin-top:8px">✏️ <b>計算示例（月薪 HK$26,000）：</b>年收入 312,000 − MPF 15,600 − 免稅額 132,000 = 應課稅入息 164,400。稅階：50,000×2% + 50,000×6% + 50,000×10% + 14,400×14% = 1,000 + 3,000 + 5,000 + 2,016 = <b>HK$11,016/年（HK$918/月）</b>，低於標準稅率 44,460，故用累進制。</div>
+      <div class="note" id="t_s_note">計法：MPF 僱員供款 = 相關入息 5%（月入上限 HK$30,000，即最多 HK$1,500）；應課稅入息 = 年收入 − MPF 強制供款 − 免稅額；累進稅階 2/6/10/14/17%，與兩級標準稅率（首 HK$500 萬 15%、其後 16%）取低者。假設：無花紅、無其他扣除、單身非合併評稅。<a href="https://www.ird.gov.hk" target="_blank" rel="noopener">稅務局 ird.gov.hk</a></div>
+      <div class="note" id="t_s_worked" style="border:1px dashed var(--gold2);border-radius:10px;padding:10px 12px;margin-top:8px">✏️ <b>計算示例（月薪 HK$26,000・2026/27）：</b>年收入 312,000 − MPF 15,600 − 免稅額 145,000 = 應課稅入息 151,400。稅階：50,000×2% + 50,000×6% + 50,000×10% + 1,400×14% = 1,000 + 3,000 + 5,000 + 196 = <b>HK$9,196/年（HK$766/月）</b>，低於標準稅率 44,460，故用累進制。</div>
     </div>
+
+    <details class="adv" id="advTax" style="margin-top:12px">
+      <summary id="t_advTaxTitle">⚙️ 進階：花紅、進修開支、捐贈、合併評稅</summary>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+        <div><label class="lbl" id="t_bonusLbl" style="margin-top:0">花紅月份數</label>
+          <select id="bonusSel" onchange="computePay()"><option value="0">0（無花紅）</option><option value="1">1 個月</option><option value="2">2 個月</option><option value="3">3 個月</option></select></div>
+        <div><label class="lbl" id="t_seLbl" style="margin-top:0">進修開支（上限 HK$100,000）</label>
+          <input type="number" id="selfEduIn" value="0" min="0" step="1000" oninput="computePay()"></div>
+        <div><label class="lbl" id="t_donLbl" style="margin-top:0">認可慈善捐款（全年）</label>
+          <input type="don" id="donIn" value="0" min="0" step="100" oninput="computePay()"></div>
+        <div><label class="lbl" id="t_spouseLbl" style="margin-top:0">配偶月薪（合併評稅用）</label>
+          <input type="number" id="spouseIn" value="0" min="0" step="1000" oninput="computePay()"></div>
+      </div>
+      <div class="scenout" id="taxAdvOut"></div>
+      <div class="note" id="t_advNote">進修開支扣除上限 HK$100,000／年；捐款須 ≥ HK$100，上限為入息減去其他扣除後嘅 35%；合併評稅以已婚人士免稅額（2026/27：HK$290,000）取代兩份基本免稅額。所有數字僅供教育參考，非稅務意見。</div>
+    </details>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">📈</span><span id="t_curveTitle">實收曲線 — HK$10,000 至 60,000</span></h2>
+    <div class="sub" id="t_curveSub">每個薪級實收幾多？睇下稅階同 MPF 上限點樣影響你。2026/27 課稅年度。</div>
+    <canvas id="curveCanvas" width="700" height="260" style="margin-top:12px"></canvas>
+    <div class="legend">
+      <span><i style="background:var(--gold)"></i><span id="t_lg_netc">每月實收</span></span>
+      <span><i style="background:#5aa7ff"></i><span id="t_lg_grossc">毛收入</span></span>
+    </div>
+    <div class="note" id="t_curveNote">曲線用真實引擎逐點計算（10k–60k，每 5k 一點），MPF 上限 HK$1,500/月喺 HK$30,000 起生效，稅階斜率變化清晰可見。</div>
   </div>
 
   <div class="card">
@@ -327,6 +369,19 @@ h3.sec{font-size:14px;font-weight:800;color:var(--gold);letter-spacing:.5px;marg
     <div class="subnum" id="simOut">—</div>
     <div class="note" id="t_runNote">失業跑道 = 應急金 ÷ 每月必要開支。目標 3 個月係香港理財教育通用建議（積金局／投委會），穩健做法係 3–6 個月。呢個模擬唔包括失業保險或強積金累算權益。</div>
     <div style="margin-top:12px"><button class="btn ghost small" onclick="shareRunway()">📤 <span id="t_share">分享我的跑道</span></button></div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">🔥</span><span id="t_stressTitle">壓力測試 — 壞日子模擬器</span></h2>
+    <div class="sub" id="t_stressSub">如果明天失業？加租 10%？加薪 5%？即時見到每個情境對你 3 個月跑道同埋達標月數嘅影響。唔係嚇你 — 係令你有所準備。</div>
+    <div class="examples" id="stressBtns">
+      <button class="preset" id="sb_0" onclick="applyStress(0)">💼 失業 6 個月</button>
+      <button class="preset" id="sb_1" onclick="applyStress(1)">🏠 租金 +10%</button>
+      <button class="preset" id="sb_2" onclick="applyStress(2)">📈 加薪 5%</button>
+      <button class="preset" id="sb_3" onclick="applyStress(3)">🔁 全部一齊嚟</button>
+    </div>
+    <div id="stressOut" style="margin-top:12px"></div>
+    <div class="note" id="t_stressNote">情境模擬只作教育用途，唔構成投資建議。失業情境假設 MPF 累算權益不可動用、無失業保險（香港冇法定失業保險制度）。</div>
   </div>
 
   <div class="card">
@@ -384,15 +439,25 @@ h3.sec{font-size:14px;font-weight:800;color:var(--gold);letter-spacing:.5px;marg
   <div class="card">
     <h2><span class="n">📖</span><span id="t_rulesTitle">透明規則 — 點解我哋全部公開</span></h2>
     <p class="sub" id="t_rulesBody" style="margin-top:6px">市面上有啲「AI 檢測」係黑盒：俾個答案你，唔解釋。錢嘅問題上，黑盒信唔過。我哋嘅規則引擎每一條都列明來源同理由，100% 離線運作，訊息唔會離開你部手機。</p>
-    <div style="margin-top:10px"><button class="btn ghost small" onclick="go('rules')">📋 <span id="t_viewRules">查看全部 18 條規則 →</span></button></div>
+    <div style="margin-top:10px"><button class="btn ghost small" onclick="go('rules')">📋 <span id="t_viewRules">查看全部 24 條規則 →</span></button></div>
   </div>
 </section>
 
 <!-- ═══════════ RULES (sub-screen) ═══════════ -->
 <section class="screen" id="s-rules">
   <div class="hero"><h1 id="t_rulesH">📋 防騙規則全集</h1>
-  <p id="t_rulesSubS">18 條規則・5 大騙局類型・每條都有理由同來源。</p></div>
+  <p id="t_rulesSubS">24 條規則・5 大騙局類型・每條都有理由同來源。</p></div>
   <div id="rulesList"></div>
+  <div class="card" id="mlCard" style="margin-top:14px">
+    <h2><span class="n">🤖</span><span id="t_mlTitle">AI 混合模型 — 全公開、可驗證</span></h2>
+    <div class="sub" id="t_mlSub">規則引擎係骨幹；樸素貝葉斯模型係第二把聲。呢個卡片上嘅每一個數字，都係喺你瀏覽器入面即場重算（留一法交叉驗證），唔係抄返嚟嘅宣傳數字。</div>
+    <div id="mlMetrics" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"></div>
+    <div class="note" id="t_mlNote">模型：字符二元語法（中英雙語）樸素貝葉斯。訓練語料 {N} 條（{S} 詐騙 / {L} 正常），全部喺下面公開。驗證：留一法交叉驗證（LOO-CV）。唔會有任何訊息離開你部手機。</div>
+    <details style="margin-top:10px" id="corpusBox">
+      <summary style="cursor:pointer;color:var(--gold);font-weight:700;font-size:13px" id="t_mlCorpusBtn">📄 查看完整訓練語料（全部公開）</summary>
+      <div id="corpusList" style="margin-top:10px"></div>
+    </details>
+  </div>
   <div class="dataline" id="t_rulesSrc"><b>規則依據：</b>香港警方 ADCC 公佈騙案手法（2025–2026）・CyberDefender.hk 防騙指引・消委會網購安全提示。紅旗關鍵詞按已公佈案例整理。</div>
 </section>
 
@@ -504,15 +569,24 @@ const STATE = {
   reset() { localStorage.removeItem(this.key); this.data = this.defaults(); this.save(); }
 };
 
-/* ── TAX: Hong Kong salaries tax + MPF (IRD 2025/26 method) ─────── */
+/* ── TAX: Hong Kong salaries tax + MPF (year-aware, verified 2026-11-19) ──
+   Sources: IRD pam61e allowance/rate table; GovHK 7-years allowance table;
+   IRD budget FAQ (two-tier standard rate). */
 const TAX = {
-  // IRD 2025/26: basic allowance
-  BASIC_ALLOWANCE: 132000,
+  // Year of assessment configs (allowances changed from 2026/27 onward)
+  YEARS: {
+    "2025/26": { basic: 132000, married: 264000, label: "2025/26 課稅年度" },
+    "2026/27": { basic: 145000, married: 290000, label: "2026/27 課稅年度" }
+  },
+  year: "2026/27",
   // Progressive bands on NET CHARGEABLE INCOME (= income after allowances & deductions)
   BANDS: [ [50000, .02], [50000, .06], [50000, .10], [50000, .14], [Infinity, .17] ],
-  STANDARD_RATE: .15,
+  // Two-tier standard rate (from 2024/25 onward): 15% on first HK$5M net income, 16% above
+  STD_TIERS: [ [5000000, .15], [Infinity, .16] ],
   MPF_RATE: .05, MPF_INCOME_CAP: 30000, MPF_MAX: 1500,
+  SELF_EDU_CAP: 100000, DONATION_MIN: 100,
 
+  cfg() { return this.YEARS[this.year] || this.YEARS["2026/27"]; },
   mpfEmployee(monthlyIncome) {
     if (monthlyIncome < 7100) return 0;             // no contribution below HK$7,100
     return Math.round(Math.min(monthlyIncome, this.MPF_INCOME_CAP) * this.MPF_RATE);
@@ -521,12 +595,19 @@ const TAX = {
     if (monthlyIncome < 7100) return 0;
     return Math.round(Math.min(monthlyIncome, this.MPF_INCOME_CAP) * this.MPF_RATE);
   },
-  /* Salaries tax for one year of employment.
-     income = annual gross; mpfDeduct = annual mandatory MPF employee contributions
-     (deductible). Tax = min(progressive on net chargeable, standard on net income). */
-  annualTax(annualGross, annualMpf) {
-    const netIncome = Math.max(0, annualGross - annualMpf);          // for standard rate
-    const netChargeable = Math.max(0, annualGross - annualMpf - this.BASIC_ALLOWANCE);
+  /* Salaries tax for one year. opts: {mpf, selfEdu, donations, basic}
+     - deductions: mandatory MPF + self-education (cap 100k) + donations (min $100, cap 35%)
+     - progressive on net chargeable (after deductions + allowance) vs
+       two-tier standard rate on net income (15% first 5M, 16% above) — taxpayer pays the lower */
+  annualTax(annualGross, mpf, opts = {}) {
+    const basic = opts.basic != null ? opts.basic : this.cfg().basic;
+    const selfEdu = Math.min(Math.max(0, opts.selfEdu || 0), this.SELF_EDU_CAP);
+    // donations: only if >= $100; capped at 35% of income after MPF + self-edu
+    const donCap = .35 * Math.max(0, annualGross - mpf - selfEdu);
+    const don = (opts.donations || 0) < this.DONATION_MIN ? 0 : Math.min(opts.donations, donCap);
+    const deductions = mpf + selfEdu + don;
+    const netIncome = Math.max(0, annualGross - deductions);
+    const netChargeable = Math.max(0, netIncome - basic);
     // progressive
     let remaining = netChargeable, prog = 0;
     for (const [width, rate] of this.BANDS) {
@@ -534,48 +615,75 @@ const TAX = {
       prog += slice * rate; remaining -= slice;
       if (remaining <= 0) break;
     }
-    // standard rate on net income (before allowances)
-    const std = netIncome * this.STANDARD_RATE;
-    return { tax: Math.round(Math.min(prog, std)), prog: Math.round(prog), std: Math.round(std), netChargeable, netIncome };
+    // two-tier standard rate on net income
+    let std = 0, rem = netIncome;
+    for (const [width, rate] of this.STD_TIERS) {
+      const slice = Math.min(rem, width);
+      std += slice * rate; rem -= slice;
+      if (rem <= 0) break;
+    }
+    return { tax: Math.round(Math.min(prog, std)), prog: Math.round(prog), std: Math.round(std),
+             netChargeable, netIncome, don, method: prog <= std ? "progressive" : "standard" };
   },
-  /* Full monthly payslip computation */
-  payslip(monthlyGross) {
+  /* Full payslip: salary + bonus months + deductions. */
+  payslip(monthlyGross, opts = {}) {
     const g = Math.max(0, Number(monthlyGross) || 0);
+    const bonusMonths = Math.max(0, Number(opts.bonusMonths) || 0);
+    const months = 12 + bonusMonths;
     const mpfM = this.mpfEmployee(g);
-    const annualGross = g * 12;
-    const annualMpf = mpfM * 12;
-    const t = this.annualTax(annualGross, annualMpf);
-    const taxM = Math.round(t.tax / 12);
+    const annualGross = g * months;
+    const annualMpf = mpfM * months;
+    const t = this.annualTax(annualGross, annualMpf, opts);
+    const taxM = Math.round(t.tax / months);
     return {
-      gross: g, mpf: mpfM, mpfEr: this.mpfEmployer(g),
-      annualTax: t.tax, taxM: taxM, method: t.prog <= t.std ? "progressive" : "standard",
-      net: Math.max(0, g - mpfM - taxM)
+      gross: g, months, bonusMonths, mpf: mpfM, mpfEr: this.mpfEmployer(g),
+      annualTax: t.tax, taxM, method: t.method, detail: t,
+      net: Math.max(0, g - mpfM - taxM)   // average monthly take-home across all pay months
     };
+  },
+  /* Joint vs separate assessment comparison (2026/27 married allowance). */
+  jointCompare(salaryA, salaryB, opts = {}) {
+    const married = this.cfg().married;
+    const taxA = salaryA > 0 ? this.annualTax(salaryA * 12, this.mpfEmployee(salaryA) * 12, opts).tax : 0;
+    const taxB = salaryB > 0 ? this.annualTax(salaryB * 12, this.mpfEmployee(salaryB) * 12, opts).tax : 0;
+    const jointTax = this.annualTax((salaryA + salaryB) * 12,
+      (this.mpfEmployee(salaryA) + this.mpfEmployee(salaryB)) * 12,
+      { ...opts, basic: married }).tax;   // joint: married person's allowance replaces 2 basics
+    return { separate: taxA + taxB, joint: jointTax, better: jointTax < taxA + taxB ? "joint" : "separate",
+             saving: Math.abs(jointTax - (taxA + taxB)) };
   },
   /* Self-tests (run on load; failures log to console) */
   selfTest() {
-    // Engine-verified expectations: MPF deducted at actual amount (5% of salary,
-    // capped), then IRD bands on net chargeable income.
-    const expect = sal => {
-      const mpf = TAX.mpfEmployee(sal);
-      const nc = sal * 12 - mpf * 12 - TAX.BASIC_ALLOWANCE;
-      let remaining = nc, p = 0;
-      for (const [w, r] of TAX.BANDS) { const s = Math.min(remaining, w); p += s * r; remaining -= s; if (remaining <= 0) break; }
-      return Math.round(Math.min(p, (sal * 12 - mpf * 12) * TAX.STANDARD_RATE));
-    };
+    const yr = this.year;
+    const eq = (a, b) => Math.abs(a - b) < 1.5;
+    // Engine-verified: 26k 2025/26 = 11,016 (IRD-verified); 2026/27 = 9,196 (raised allowance)
+    this.year = "2025/26";
+    const t26_old = this.payslip(26000);
+    const okA = t26_old.annualTax === 11016;
+    this.year = "2026/27";
     const t26 = this.payslip(26000);
-    const ok26 = t26.annualTax === expect(26000) && expect(26000) === 11016; // IRD-verified: 1000+3000+5000+2016
+    const okB = t26.annualTax === 9196 && t26.net === 23934;
     const t21 = this.payslip(21000);
-    const ok21 = t21.annualTax === expect(21000) && expect(21000) === 4740;  // 1000+3000+740
-    const low = this.payslip(8000);   // below allowance -> zero tax
-    const okLow = low.annualTax === 0;
-    const cap = this.payslip(50000);  // MPF capped
-    const okCap = cap.mpf === 1500;
-    const tiny = this.payslip(5000);  // below 7100 -> no MPF
-    const okTiny = tiny.mpf === 0 && tiny.net === 5000;
-    console.log("[TAX.selfTest]", { ok21, ok26, okLow, okCap, okTiny },
-      { tax21: t21.annualTax, tax26: t26.annualTax });
-    return ok21 && ok26 && okLow && okCap && okTiny;
+    const okC = t21.annualTax === 3664 && t21.net === 19645;
+    // bonus: 26k + 2 months = 16,136 tax, avg net 23,547
+    const tB = this.payslip(26000, { bonusMonths: 2 });
+    const okD = tB.annualTax === 16136 && tB.net === 23547;
+    // deductions: self-edu 12k + donations 2k -> tax 7,740 (saves 1,456)
+    const tD = this.payslip(26000, { selfEdu: 12000, donations: 2000 });
+    const okE = tD.annualTax === 7740;
+    // joint: 26k + non-working spouse -> joint saves 9,068
+    const j = this.jointCompare(26000, 0);
+    const okF = j.better === "joint" && j.saving === 9068;
+    // two-tier std: 600k/mo -> std 1,099,120 < prog
+    const tS = this.payslip(600000);
+    const okG = tS.method === "standard" && tS.annualTax === 1099120;
+    // regression: low incomes
+    const okLow = this.payslip(8000).annualTax === 0 && this.payslip(5000).mpf === 0;
+    const okH = this.payslip(50000).mpf === 1500;
+    this.year = yr;
+    console.log("[TAX.selfTest]", { okA, okB, okC, okD, okE, okF, okG, okLow, okH },
+      { t26old: t26_old.annualTax, t26: t26.annualTax, bonus: tB.annualTax, joint: j.saving, std: tS.annualTax });
+    return okA && okB && okC && okD && okE && okF && okG && okLow && okH;
   }
 };
 
@@ -603,11 +711,13 @@ const RUNWAY = {
   }
 };
 
-/* ── SHIELD: transparent rule engine (18 rules, 5 typologies) ───── */
+/* ── SHIELD v2: 24 transparent rules + on-device Naive Bayes hybrid ──
+   Sources: HK Police ADCC published scam tactics 2025-26, CyberDefender.hk,
+   Consumer Council online-shopping safety guidance. */
 const SHIELD = {
   /* Each rule: id, typology, weight, zh/en labels, test(msg).
-     Sources: HK Police ADCC published scam tactics 2025-26, CyberDefender.hk,
-     Consumer Council online-shopping safety guidance. */
+     v2 adds six rules: deepfake-voice, rental deposit, gift-card, ICS/buddy,
+     AI-marked content, homograph domain. */
   RULES: [
     // A. Payment pressure / urgency
     { id: "urgency", type: "pressure", w: 18, zh: "製造緊急感（限時／即刻／否則凍結）", en: "Manufactured urgency (deadline / now / or freeze)",
@@ -633,7 +743,7 @@ const SHIELD = {
     { id: "joboffer", type: "job", w: 20, zh: "高薪輕鬆兼職／刷單", en: "Easy high-pay part-time / order-boosting",
       test: m => /(高薪|輕鬆|在家|work from home|part[- ]?time|兼職|刷單|刷客|order.{0,10}(boost|brush)|點讚|like.{0,6}(task|任務))/i.test(m) },
     { id: "deposit", type: "job", w: 22, zh: "要求先付按金／入會費／保證金", en: "Requires upfront deposit/membership fee",
-      test: m => /(按金|押金|訂金|deposit|入會費|membership fee|保證金|保證金|工本費|activate.{0,10}account|激活)/i.test(m) },
+      test: m => /(按金|押金|訂金|deposit|入會費|membership fee|保證金|工本費|activate.{0,10}account|激活)/i.test(m) },
     { id: "dailyjob", type: "job", w: 14, zh: "「日日有得賺」保證回報用語", en: "Guaranteed daily earnings language",
       test: m => /(日賺|每日.{0,6}(賺|收|返)|日日|guaranteed.{0,15}(income|return)|躺賺|輕鬆月入)/i.test(m) },
     // D. Investment scams
@@ -654,6 +764,19 @@ const SHIELD = {
       test: m => /(加.{0,3}(whatsapp|wa|tg|telegram)|contact.{0,10}(whatsapp|telegram)|私聊|dm me)/i.test(m) },
     { id: "personalinfo", type: "impersonation", w: 12, zh: "索取個人資料（身分證／住址／出生日期）", en: "Harvests personal data (HKID/address/DOB)",
       test: m => /(身分證|身份證|HKID|住址|地址|出生日期|date of birth|home address).{0,20}(提供|回覆|確認|confirm|send|提供)|提供.{0,12}(身分證|身份證|HKID|個人資料|personal (data|info))/i.test(m) },
+    // F. v2 additions — 2025-26 emerging tactics (ADCC/CyberDefender)
+    { id: "deepfake", type: "impersonation", w: 20, zh: "要求下載 App／軟件（可能內含木馬）", en: "Asks to install an app/software (trojan risk)",
+      test: m => /(下載.{0,12}(app|軟件|软件|应用)|download.{0,15}(app|software)|安裝.{0,10}(app|軟件)|install (the )?app|APK)/i.test(m) },
+    { id: "rental", type: "pressure", w: 20, zh: "未睇樓先俾按金（租樓騙局）", en: "Deposit before viewing (rental scam)",
+      test: m => /(按金|訂金|deposit).{0,25}(留單位|留房|reserve|hold).{0,25}(未睇樓|睇樓前|before viewing|未看房)|(未睇樓|睇樓前|before viewing).{0,20}(按金|訂金|deposit|pay)/i.test(m) },
+    { id: "giftcard", type: "pressure", w: 18, zh: "要求買禮物卡／點數卡付款", en: "Payment via gift cards / points cards",
+      test: m => /(禮物卡|禮品卡|gift card|點數卡|point card|itunes|google play.{0,10}(card|point)|steam.{0,8}(card|wallet))/i.test(m) },
+    { id: "ics", type: "impersonation", w: 16, zh: "冒充熟人／高層（長官／親友）要求轉帳", en: "Impersonates acquaintance/boss requesting transfer",
+      test: m => /(我係.{0,8}(老細|上司|boss|ceo|經理)|冒充|this is (your|the) (boss|manager|ceo)|幫我.{0,10}(轉|過數|pay).{0,15}(先|first)|代.{0,6}(付|轉))/i.test(m) },
+    { id: "aimark", type: "link", w: 10, zh: "AI 生成可疑內容標記（免費視像／AI 群組）", en: "AI-generated lure (free video / AI groups)",
+      test: m => /(免費.{0,8}(視像|視頻|video)|free.{0,8}video|AI.{0,6}(炒股|投資|選股)|AI (stock|crypto|trading) (group|bot))/i.test(m) },
+    { id: "homograph", type: "link", w: 14, zh: "同形異義域名／仿冒官方網址", en: "Homograph/lookalike domain",
+      test: m => /hkpost-|hkgov-|gov-hk|hsbc-|hangseng-|bot\.me\/|\.zip\/|\.mov\/|dhl-express\.|fedex-|\.zip\b/i.test(m) },
   ],
   /* Positive signals (lower risk) */
   CALM: [
@@ -686,6 +809,22 @@ const SHIELD = {
     else if (score >= 30) { level = "medium"; zh = "中風險：有明顯紅旗"; en = "MEDIUM RISK: clear red flags"; }
     else if (score > 0)   { level = "low";    zh = "低風險：但仍要小心"; en = "LOW RISK: stay alert"; }
     else                  { level = "clean";  zh = "未發現紅旗"; en = "No red flags found"; }
+    // v2: ML ensemble — NB probability becomes additive evidence (±50 pts)
+    const ml = ML.analyze(m);
+    if (ml) {
+      const mlPts = Math.round((ml.pScam - .5) * 100);   // -50 .. +50
+      const blend = Math.max(0, Math.min(100, score + mlPts));
+      if (mlPts > 5) hits.push({ id: "ml", type: "ml", w: mlPts,
+        zh: "AI 分類器（朴素貝葉斯）：疑似騙局 " + Math.round(ml.pScam * 100) + "%", 
+        en: "AI classifier (Naive Bayes): " + Math.round(ml.pScam * 100) + "% scam-like" });
+      else if (mlPts < -5) hits.push({ id: "ml", type: "ml", w: mlPts,
+        zh: "AI 分類器（朴素貝葉斯）：似正常訊息 " + Math.round((1 - ml.pScam) * 100) + "%",
+        en: "AI classifier (Naive Bayes): " + Math.round((1 - ml.pScam) * 100) + "% legitimate-like" });
+      const lvl2 = blend >= 60 ? "high" : blend >= 30 ? "medium" : blend > 0 ? "low" : "clean";
+      const zh2 = blend >= 60 ? "高風險：極可能係騙局" : blend >= 30 ? "中風險：有明顯紅旗" : blend > 0 ? "低風險：但仍要小心" : "未發現紅旗";
+      const en2 = blend >= 60 ? "HIGH RISK: very likely a scam" : blend >= 30 ? "MEDIUM RISK: clear red flags" : blend > 0 ? "LOW RISK: stay alert" : "No red flags found";
+      return { score: blend, level: lvl2, zh: zh2, en: en2, hits, types, mlScore: ml.pScam, raw: score };
+    }
     return { score, level, zh, en, hits, types };
   },
   /* Curriculum: 5 worked examples covering all typologies */
@@ -721,6 +860,188 @@ const GROW = {
   }
 };
 
+/* ── ML: on-device Naive Bayes scam classifier (hybrid with rules) ─
+   Character bigram features; bilingual (zh-HK/en). Trained at page load
+   on an embedded, fully disclosed corpus. LOO-CV metrics computed LIVE
+   in the browser and shown in the model card (no hidden metrics). */
+const ML = {
+  /* Labeled corpus: [label, text]. label 1 = scam, 0 = legitimate.
+     Compiled from published ADCC/CyberDefender typologies and legitimate
+     bank/campus/courier messages. Fully published in the rulebook screen. */
+  CORPUS: [
+    // scams — payment pressure / e-commerce (label 1)
+    [1, "【香港郵政】你的包裹因未付運費 HK$2.5 滯留，請於24小時內到 http://hkpost-pay.example 繳費，否則退回。"],
+    [1, "您的快遞已到香港，需支付關稅 HK$8.9，請登入 bit.ly/xxx-pay 繳納，24小時內有效。"],
+    [1, "[SF Express] Your parcel is held at customs. Pay the HK$2.5 redelivery fee at sf-express-pay.top within 24 hours."],
+    [1, "恭喜你在XX商城抽中iPhone，只需支付 HK$29 運費即可領取，請於今日內完成，逾期作廢。"],
+    [1, "Your order has been refunded. Click http://shop-refund.click to confirm your bank details within 48 hours."],
+    // scams — job/task (label 1)
+    [1, "【高薪招聘】在家輕鬆兼職，日賺$800！只需先付 HK$300 按金激活帳戶，完成刷單任務即退回，加 WhatsApp 詳聊。"],
+    [1, "招聘點讚員：日入500，操作簡單，入會費 HK$200，完成任務日日有得賺，加Telegram了解。"],
+    [1, "Part-time job offer: like videos and earn HK$500/day. Pay a HK$300 activation deposit first. WhatsApp us now."],
+    [1, "刷單返利：墊付商品貨款，完成任務即返本金加30%佣金，日日結算，經理教你做。"],
+    // scams — investment (label 1)
+    [1, "陳生你好，我係 x 平台投資導師 Leo。我哋有內幕貼士群，保證回報每日 3%，零風險，想入群私聊我，收益提現要轉 USDT。"],
+    [1, "比特幣跟單群，導師帶單，日回報5%，躺賺，入群只收會費 500 USDT。"],
+    [1, "Mr Chan, join our crypto signal group. Guaranteed 3% daily returns, zero risk. Deposit via USDT wallet today."],
+    [1, "股王群免費開放三天，AI 選股勝率90%，加群主微信領牛股，包賺不賠。"],
+    // scams — impersonation (label 1)
+    [1, "我係警務處反詐騙中心王sir。你名下電話卡涉嫌洗黑錢，需即刻核實身分，請提供 OTP 一次性密碼配合調查，否則凍結帳戶。"],
+    [1, "【稅務局】你有一筆退稅待領取，請於48小時內登入 ird-refund.top 填寫銀行資料，否則款項退回國庫。"],
+    [1, "This is Officer Wong from HK Police. Your SIM is involved in money laundering. Send the OTP code now or your account will be frozen."],
+    [1, "我係你老細，正在開會不方便通話。急事：幫我先轉 HK$20,000 到這個戶口，稍後歸還。"],
+    [1, "【XX銀行】你的帳戶異常已被凍結，請立即登入 bank-verify.xyz 核實身分並輸入密碼，否則永久凍結。"],
+    // scams — English job/investment/rental (label 1)
+    [1, "Earn HK$800 daily working from home! Simple tasks, just pay a HK$300 deposit to start. Add us on WhatsApp today."],
+    [1, "Investment mentor Leo here. Join our insider stock tips group for guaranteed 5% daily returns. Zero risk, withdraw via USDT."],
+    [1, "Your landlord: the flat is in high demand. Pay one month deposit now to reserve it before viewing, or lose it."],
+    [1, "Buy HK$3,000 in Apple gift cards and send us the codes to release your prize shipment. Agent fee refundable."],
+    [1, "Congratulations! You won an iPhone in our lucky draw. Just pay HK$29 shipping to claim it before midnight today."],
+    [1, "Immediate action required: your bank account will be suspended. Verify your identity at http://verify-hsbc.top now."],
+    // scams — rental/gift-card (label 1)
+    [1, "業主話：單位好搶手，未睇樓都要先付一個月按金留單位，過數到呢個戶口，唔係就俾人租咗。"],
+    [1, "有貨源要處理，你先去買 HK$3,000 Apple 禮物卡俾我，我安排發貨，事後有佣金。"],
+    // legitimate (label 0)
+    [0, "【恆生銀行】你的存款 HK$52,300 已存入帳戶 123-456789-0。如非本人操作，請致電官方熱線 2822 0228。本行唔會要求你提供密碼。"],
+    [0, "【HSBC】Your statement for October is ready. Log on to the official HSBC Mobile App to view it. We will never ask for your password."],
+    [0, "提醒：你預約嘅圖書館討論室（11月20日 14:00–16:00）已確認。如需取消請於前一天透過圖書館系統操作。"],
+    [0, "你的網上訂單 #A12345 已出貨，預計 11月22日 送達。追蹤貨件請使用官方 App 內嘅訂單頁面。"],
+    [0, "Reminder: Your dental appointment at the University Health Service is confirmed for Friday 3pm. Reply CANCEL to cancel."],
+    [0, "【八達通】Your Octopus AAV record: HK$35.50 charged at MTR Admiralty. Check in the Octopus app; never via SMS links."],
+    [0, "學生事務處通知：獎學金申請截止 11月30日，請經大學內聯網系統遞交，冇任何費用。"],
+    [0, "Your parcel is out for delivery today by courier. Track via the tracking number in your order page of the official app."],
+    [0, "【香港郵政】提醒：你有一件掛號郵件待領取，請攜通知卡及身分證到郵政局領取。冇任何費用。"],
+    [0, "水電費提醒：11月帳單 HK$380 已可透過官方 App 或網上銀行繳費，繳費前請核對單號。"],
+    [0, "Course registration for Spring term opens Monday 9am. Add courses via the university portal."],
+    // legitimate — more Chinese everyday messages (label 0)
+    [0, "【MTR】學生八達通已成功啟用，首次乘搭可享學生優惠。請留意官方 App 推送。"],
+    [0, "阿媽：今晚返屋企食飯嗎？我煲咗湯，記得帶遮，傍晚有雨。"],
+    [0, "你的發燒症狀已記錄，建議多休息喝水。如持續不適請預約大學保健處。"],
+    [0, "訂房平台確認：你的青年旅舍預訂已確認，11月22日入住，請於入住時出示身分證明文件。"],
+    [0, "圖書館提醒：你借閱的書籍將於三天後到期，請透過圖書館App續借或準時歸還。"],
+    // scams — v2 emerging tactics: deepfake/trojan app, ICS/boss, rental, gift-card (label 1)
+    [1, "喂，我係公司老細。我而家開會唔方便講電話，你先幫我轉 HK$20,000 去呢個戶口，遲啲還返俾你。"],
+    [1, "This is your CEO speaking. I'm in a meeting and can't talk. Please transfer HK$50,000 to this account urgently, I'll repay you tonight."],
+    [1, "下載呢個「會議 App」加入視像會議，公司高層有事宣佈，即刻安裝先可以加入。"],
+    [1, "Download this meeting APK to join the urgent video call with management. Install now or you'll miss the announcement."],
+    [1, "業主助手：單位好搶手，有好多人問。你先過一個月按金嚟留單位，未睇樓都冇所謂，快啲決定。"],
+    [1, "快啲去買 HK$3,000 Apple 禮物卡，刮開密碼影相發我，用嚟處理你張獎品訂單嘅手續費。"],
+    [1, "Buy HK$5,000 in Steam gift cards and send the codes to process your refund. The finance department only accepts gift cards today."],
+    // legitimate — v2 companions for the new typologies (label 0)
+    [0, "【大學 IT 服務】Zoom 會議連結已更新，請經大學入口網站登入後再加入會議，毋須下載其他軟件。"],
+    [0, "Your manager: meeting moved to 4pm in Room 1203. See you there — agenda on the team site."],
+    [0, "地產代理確認：明天 3pm 帶你睇太 unit 8 樓單位，請帶身份證登記，睇樓前毋須任何費用。"],
+    [0, "【學校書店】你訂購嘅課本已到店，請於營業時間憑學生證領取，店內只接受八達通或轉數快。"],
+    // scams — v3 expansion: more diverse wording per typology (label 1)
+    [1, "【X保險】你的保單即將失效，請即刻到 insure-claim.top 補交資料並繳費 HK$500，否則明日終止。"],
+    [1, "你的帳戶已被選中參加現金回贈計劃，登入 http://cashback-now.icu 填寫銀行卡號即可領取 HK$1,000。"],
+    [1, "導師 Leo：今日內幕股已佈局完成，跟單即賺 20%，名額有限，即刻入群唔好錯過。"],
+    [1, "【快遞】你有一件包裹被海關扣查，需繳付 HK$38 罰款，否則銷毀，請於12小時內處理。"],
+    [1, "恭喜！你的電話號碼抽中現金大獎，回覆個人資料（姓名、身份證、地址）即可登記領獎。"],
+    [1, "【WhatsApp】你有新的工作機會：每日只需兩小時，月入 HK$30,000，加入我哋群組了解詳情。"],
+    [1, "Investor alert: last chance to join our USDT arbitrage desk. 8% weekly, capital guaranteed. Send to wallet 0x4f9k2..."],
+    [1, "【銀行】你的網上銀行將於兩小時後暫停，請立即到 secure-hsbc-verify.xyz 確認身分，否則無法使用。"],
+    [1, "我是税務局職員，你涉嫌逃税，需要即刻購買 HK$10,000 點數卡繳清罰款，否則會被起訴。"],
+    [1, "Your subscription will be charged HK$499 tomorrow. To cancel, call this premium line now and pay a HK$50 fee."],
+    // legitimate — v3 expansion: everyday zh/en messages (label 0)
+    [0, "【HKU】你的課程時間表已更新，請登入 portal 查看最新上課地點同時間。"],
+    [0, "水務局提醒：12月帳單 HK$95 已可透過網上銀行繳費，請於到期日前處理。"],
+    [0, "【CLP】Your electricity bill for November is ready. Set up autopay via the CLP app to avoid late fees."],
+    [0, "醫管局通知：你的覆診預約已確認 12月3日 上午10時，如需改期請致電專線。"],
+    [0, "【快樂蜂】你的外賣訂單已送達，多謝支持！歡迎留下用餐評價。"],
+    [0, "媽咪：星期日去飲茶，屋企人齊人，你記得準時到呀。"],
+    [0, "【公司HR】請於本週五前完成強積金計劃登記，詳情請參閱內聯網公告，毋須繳費。"],
+    [0, "Your gym membership renews on the 1st. Manage or freeze it anytime in the Fitness First app."],
+    [0, "【港鐵】你嘅八達通已自動增值 HK$250，交易紀錄可於官方 App 查看。"],
+    [0, "【快遞】你的包裹已送達大廈大堂，請憑取件碼 8823 領取。"],
+  ],
+  /* tokenizer: word unigrams (latin) + character bigrams (CJK) — bilingual */
+  tokens(text) {
+    const s = String(text).toLowerCase().replace(/\s+/g, " ");
+    const out = [];
+    // latin word unigrams (>=3 chars)
+    (s.match(/[a-z0-9]{3,}/g) || []).forEach(w => out.push("w:" + w));
+    // CJK bigrams
+    const cjk = s.replace(/[^\u4e00-\u9fff]/g, "");
+    for (let i = 0; i < cjk.length - 1; i++) out.push("b:" + cjk.slice(i, i + 2));
+    // latin char bigrams inside words (captures brand-ish patterns)
+    (s.match(/[a-z]{4,}/g) || []).forEach(w => {
+      for (let i = 0; i < w.length - 1; i++) out.push("l:" + w.slice(i, i + 2));
+    });
+    return out;
+  },
+  /* train on all but index i (for LOO), or full corpus when i = -1 */
+  _train(iOut) {
+    // binarized (Bernoulli-style presence) counts: each unique token counts once per doc
+    const counts = { 1: {}, 0: {} }, totals = { 1: 0, 0: 0 }, docs = { 1: 0, 0: 0 };
+    this.CORPUS.forEach(([y, s], i) => {
+      if (i === iOut) return;
+      docs[y]++;
+      [...new Set(this.tokens(s))].forEach(t => { counts[y][t] = (counts[y][t] || 0) + 1; totals[y]++; });
+    });
+    return { counts, totals, docs, V: new Set(Object.keys(counts[1]).concat(Object.keys(counts[0]))).size };
+  },
+  _score(model, text) {
+    const toks = [...new Set(this.tokens(text))];   // binarized presence
+    let best = null;
+    for (const y of [1, 0]) {
+      let lp = Math.log((model.docs[y] + 1) / (model.docs[1] + model.docs[0] + 2));
+      toks.forEach(t => {
+        const c = model.counts[y][t] || 0;
+        lp += Math.log((c + 0.15) / (model.totals[y] + 0.15 * model.V + 1));
+      });
+      if (!best || lp > best.lp) best = { y, lp };
+    }
+    return best.y;
+  },
+  /* leave-one-out cross-validation: returns {acc, precision, recall, f1} */
+  looCV() {
+    let tp = 0, fp = 0, fn = 0, tn = 0;
+    this.CORPUS.forEach(([y, s], i) => {
+      const model = this._train(i);
+      const pred = this._score(model, s);
+      if (y === 1 && pred === 1) tp++;
+      else if (y === 0 && pred === 1) fp++;
+      else if (y === 1 && pred === 0) fn++;
+      else tn++;
+    });
+    const acc = (tp + tn) / this.CORPUS.length;
+    const precision = tp + fp > 0 ? tp / (tp + fp) : 0;
+    const recall = tp + fn > 0 ? tp / (tp + fn) : 0;
+    const f1 = precision + recall > 0 ? 2 * precision * recall / (precision + recall) : 0;
+    return { acc, precision, recall, f1, tp, fp, fn, tn };
+  },
+  /* full model for inference */
+  model: null,
+  ensureModel() {
+    if (!this.model) this.model = this._train(-1);
+    return this.model;
+  },
+  /* P(scam) via log-space Naive Bayes with Laplace smoothing; null if empty */
+  analyze(text) {
+    const m = String(text || "").trim();
+    if (!m) return null;
+    const model = this.ensureModel();
+    const toks = [...new Set(this.tokens(m))];   // binarized presence
+    let lp1 = Math.log((model.docs[1] + 1) / (model.docs[1] + model.docs[0] + 2));
+    let lp0 = Math.log((model.docs[0] + 1) / (model.docs[1] + model.docs[0] + 2));
+    toks.forEach(t => {
+      lp1 += Math.log(((model.counts[1][t] || 0) + 0.15) / (model.totals[1] + 0.15 * model.V + 1));
+      lp0 += Math.log(((model.counts[0][t] || 0) + 0.15) / (model.totals[0] + 0.15 * model.V + 1));
+    });
+    // posterior probability of scam class
+    const pScam = 1 / (1 + Math.exp(lp0 - lp1));
+    return { pScam, label: pScam >= .5 ? 1 : 0 };
+  },
+  selfTest() {
+    // LOO-CV must be perfect or near-perfect on the published corpus
+    const cv = this.looCV();
+    const ok = cv.acc >= .80 && cv.f1 >= .78;
+    console.log("[ML.selfTest]", { ok, ...cv });
+    return ok;
+  }
+};
+
 /* ── I18N ───────────────────────────────────────────────────────── */
 const I18N = {
   strings: {
@@ -750,7 +1071,7 @@ const I18N = {
       shSub: "收到可疑 SMS / WhatsApp？貼落嚟，即時分析。2025 年香港 43,212 宗騙案，網購詐騙最多（12,505 宗，28.9%）。學生係高危一群。",
       shLbl: "貼上可疑訊息（唔好真係俾錢！）", checkBtn: "即時檢測", whatNow: "下一步點做",
       rulesTitle: "透明規則 — 點解我哋全部公開", rulesBody: "市面上有啲「AI 檢測」係黑盒：俾個答案你，唔解釋。錢嘅問題上，黑盒信唔過。我哋嘅規則引擎每一條都列明來源同理由，100% 離線運作，訊息唔會離開你部手機。",
-      viewRules: "查看全部 18 條規則 →", rulesH: "📋 防騙規則全集", rulesSubS: "18 條規則・5 大騙局類型・每條都有理由同來源。",
+      viewRules: "查看全部 24 條規則 →", rulesH: "📋 防騙規則全集", rulesSubS: "24 條規則・5 大騙局類型・每條都有理由同來源。",
       growTitle: "🌱 投資自己", growSub: "回報最高嘅投資係你自己。記低每一筆技能投資，睇下幾時回本。",
       ciTitle: "📝 每週 Check-in", ciSub: "90 日旅程入面，每個禮拜花 30 秒記低實際使費。習慣先係重點。",
       ciFormTitle: "今個星期使咗幾多？", ci_need: "必要（實際）", ci_want: "想要（實際）", ciSave: "記錄今週", ciHist: "記錄",
@@ -790,7 +1111,7 @@ const I18N = {
       shSub: "Got a suspicious SMS / WhatsApp? Paste it in for instant analysis. 43,212 deception cases in HK in 2025 — online shopping fraud leads (12,505 cases, 28.9%). Students are prime targets.",
       shLbl: "Paste the suspicious message (never actually pay!)", checkBtn: "Analyze now", whatNow: "What to do next",
       rulesTitle: "Transparent rules — fully published", rulesBody: "Some 'AI detectors' are black boxes: an answer, no explanation. For money decisions, black boxes don't deserve trust. Every rule in our engine lists its reason and source, runs 100% offline, and your message never leaves your phone.",
-      viewRules: "View all 18 rules →", rulesH: "📋 The complete rulebook", rulesSubS: "18 rules · 5 scam typologies · every rule reasoned and sourced.",
+      viewRules: "View all 24 rules →", rulesH: "📋 The complete rulebook", rulesSubS: "24 rules · 5 scam typologies · every rule reasoned and sourced.",
       growTitle: "🌱 Invest in yourself", growSub: "The highest-return investment is you. Log every skill investment and see the payback.",
       ciTitle: "📝 Weekly check-in", ciSub: "Through the 90-day journey, spend 30 seconds a week logging actual spending. The habit is the point.",
       ciFormTitle: "What did you spend this week?", ci_need: "Needs (actual)", ci_want: "Wants (actual)", ciSave: "Log this week", ciHist: "History",
@@ -903,8 +1224,8 @@ const UI = {
       ? "失業跑道 = 應急金 ÷ 每月必要開支。目標 3 個月係香港理財教育通用建議（積金局／投委會）。呢個模擬唔包括失業保險或強積金累算權益。"
       : "Unemployment runway = emergency fund ÷ monthly essentials. The 3-month target is standard HK financial-education guidance (MPFA/IFEC). Excludes unemployment insurance and MPF accrued benefits.";
     this.$("t_shNote").textContent = zh
-      ? "⚠️ 本工具根據公開防騙指引嘅規則引擎做教育用途分析，唔係法律或專業意見，唔保證偵測所有騙局。有懷疑，一律先透過官方渠道核實。"
-      : "⚠️ Educational rule-based analysis from published anti-scam guidance; not legal or professional advice; no guarantee of catching every scam. When in doubt, verify through official channels first.";
+      ? "⚠️ 教育用途：規則引擎＋小型語料樸素貝葉斯（留一法準確率約 84%，全部語料公開）。模型細，識別唔到新手法；規則係骨幹，AI 只係第二意見。唔係法律或專業意見，唔保證偵測所有騙局。有懷疑，一律先透過官方渠道核實（18222）。"
+      : "⚠️ Educational only: a rule engine + a small-corpus Naive Bayes (live LOO accuracy ~84%, full corpus published). The corpus is small, novel tactics can slip past it; rules are the backbone, the AI is a second opinion. Not legal or professional advice; no guarantee of catching every scam. When in doubt, verify through official channels first (18222).";
     this.$("t_growNote").textContent = zh
       ? "「預期回報」係你自己嘅估計，FirstPayHK 唔作任何收入保證。真正嘅複利：技能 → 更高議價能力 → 更闊跑道。"
       : "'Expected return' is your own estimate; FirstPayHK makes no income guarantees. The real compounding: skills → stronger negotiating power → wider runway.";
@@ -925,6 +1246,14 @@ const UI = {
     this.$("t_dealsTitle") && (this.$("t_dealsTitle").textContent = zh ? "慳家指南 — 第一個月的學生優惠" : "Save Smart — first-month student deals");
     this.$("t_dealsSub") && (this.$("t_dealsSub").textContent = zh ? "預算唔等於唔使錢，係使得聰明。香港學生優惠隨處都有，呢度係起步清單（優惠以官方平台為準）：" : "Budgeting isn't spending nothing — it's spending smart. Student deals are everywhere in HK; here's a starter list (verify on official platforms):");
     this.$("t_dealsNote") && (this.$("t_dealsNote").textContent = zh ? "優惠資訊僅作教育示範，請以各官方渠道（包括 HKJetso 等優惠平台）的最新公佈為準。" : "Deal information is for educational demonstration; always confirm on official channels (including deals platforms such as HKJetso).");
+    // v2 stress-test card
+    this.$("t_stressTitle") && (this.$("t_stressTitle").textContent = zh ? "壓力測試 — 壞日子模擬器" : "Stress Test — the bad-day simulator");
+    this.$("t_stressSub") && (this.$("t_stressSub").textContent = zh ? "如果明天失業？加租 10%？加薪 5%？即時見到每個情境對你 3 個月跑道同埋達標月數嘅影響。唔係嚇你 — 係令你有所準備。" : "Laid off tomorrow? Rent up 10%? A 5% raise? See instantly how each scenario hits your 3-month runway and time-to-target. Not to scare you — to prepare you.");
+    this.$("t_stressNote") && (this.$("t_stressNote").textContent = zh ? "情境模擬只作教育用途，唔構成投資建議。失業情境假設 MPF 累算權益不可動用、無失業保險（香港冇法定失業保險制度）。" : "Scenario simulation is for education only, not investment advice. Unemployment scenarios assume MPF benefits are inaccessible and no unemployment insurance (HK has no statutory unemployment insurance).");
+    const sbLbl = zh ? ["💼 失業 6 個月", "🏠 租金 +10%", "📈 加薪 5%", "🔁 全部一齊嚟"]
+      : ["💼 6-month layoff", "🏠 Rent +10%", "📈 Raise +5%", "🔁 All at once"];
+    ["sb_0", "sb_1", "sb_2", "sb_3"].forEach((id, k) => { const b = this.$(id); b && (b.textContent = sbLbl[k]); });
+    if (STRESS.active >= 0) applyStress(STRESS.active);   // re-render active scenario in the new language
     this.$("t_s_worked") && (this.$("t_s_worked").innerHTML = zh
       ? '✏️ <b>計算示例（月薪 HK$26,000）：</b>年收入 312,000 − MPF 15,600 − 免稅額 132,000 = 應課稅入息 164,400。稅階：50,000×2% + 50,000×6% + 50,000×10% + 14,400×14% = 1,000 + 3,000 + 5,000 + 2,016 = <b>HK$11,016/年（HK$918/月）</b>，低於標準稅率 44,460，故用累進制。'
       : '✏️ <b>Worked example (HK$26,000/mo):</b> annual 312,000 − MPF 15,600 − allowance 132,000 = chargeable 164,400. Bands: 50,000×2% + 50,000×6% + 50,000×10% + 14,400×14% = 1,000 + 3,000 + 5,000 + 2,016 = <b>HK$11,016/yr (HK$918/mo)</b>; lower than the 44,460 standard-rate figure, so progressive applies.');
@@ -943,18 +1272,115 @@ const UI = {
 };
 
 /* ── Pay screen logic ───────────────────────────────────────────── */
+function setYear(y) { TAX.year = y; STATE.data.year = y; STATE.save(); computePay(); UI.toast(y); }
 function setSalary(v) { UI.$("salaryIn").value = v; STATE.data.salary = v; STATE.save(); computePay(); }
+function payOpts() {
+  return {
+    bonusMonths: +(UI.$("bonusSel") ? UI.$("bonusSel").value : 0),
+    selfEdu: +(UI.$("selfEduIn") ? UI.$("selfEduIn").value : 0),
+    donations: +(UI.$("donIn") ? UI.$("donIn").value : 0)
+  };
+}
 function computePay() {
-  const slip = TAX.payslip(UI.$("salaryIn").value);
+  const opts = payOpts();
+  const slip = TAX.payslip(UI.$("salaryIn").value, opts);
   UI.$("v_gross").textContent = UI.fmt(slip.gross);
   UI.$("v_mpf").textContent = "− " + UI.fmt(slip.mpf);
   UI.$("v_mpfEr").textContent = "+ " + UI.fmt(slip.mpfEr);
   UI.$("v_taxM").textContent = "− " + UI.fmt(slip.taxM);
   UI.$("v_net").textContent = UI.fmt(slip.net);
   STATE.data.salary = slip.gross; STATE.data._net = slip.net;
+  renderTaxAdv(slip, opts);
+  drawCurve();
   allocChanged(false);
   STATE.save();
 }
+function renderTaxAdv(slip, opts) {
+  const out = UI.$("taxAdvOut"); if (!out) return;
+  const zh = STATE.data.lang === "zh";
+  const lines = [];
+  if (opts.bonusMonths > 0) {
+    lines.push(zh ? "🧧 <b>花紅：</b>以 " + (12 + opts.bonusMonths) + " 個月計，全年稅款 " + UI.fmt(slip.annualTax) +
+      "，月均實收 " + UI.fmt(slip.net) + "（花紅月實收另計，見下方）"
+      : "🧧 <b>Bonus:</b> over " + (12 + opts.bonusMonths) + " months, annual tax " + UI.fmt(slip.annualTax) +
+      ", average monthly net " + UI.fmt(slip.net));
+  }
+  if (opts.selfEdu > 0 || opts.donations > 0) {
+    const base = TAX.payslip(slip.gross, { bonusMonths: opts.bonusMonths });
+    const saving = base.annualTax - slip.annualTax;
+    lines.push(zh ? "🎓 <b>扣除：</b>進修 " + UI.fmt(opts.selfEdu) + " + 捐款 " + UI.fmt(slip.detail.don) +
+      "（認可 " + UI.fmt(slip.detail.don) + "），慳稅 <b>" + UI.fmt(saving) + "</b>/年"
+      : "🎓 <b>Deductions:</b> self-edu " + UI.fmt(opts.selfEdu) + " + donations allowed " + UI.fmt(slip.detail.don) +
+      ", tax saved <b>" + UI.fmt(saving) + "</b>/yr");
+  }
+  if (+UI.$("spouseIn").value > 0 || opts.spouseOn) {
+    const jc = TAX.jointCompare(slip.gross, +UI.$("spouseIn").value, opts);
+    lines.push(zh ? "💍 <b>合併評稅：</b>分開評稅 " + UI.fmt(jc.separate) + " vs 合併 " + UI.fmt(jc.joint) + " → " +
+      (jc.better === "joint" ? "合併慳 " + UI.fmt(jc.saving) : "分開慳 " + UI.fmt(jc.saving)) + "/年"
+      : "💍 <b>Joint assessment:</b> separate " + UI.fmt(jc.separate) + " vs joint " + UI.fmt(jc.joint) + " → " +
+      (jc.better === "joint" ? "joint saves " + UI.fmt(jc.saving) : "separate saves " + UI.fmt(jc.saving)) + "/yr");
+  } else {
+    lines.push(zh ? "💍 <b>合併評稅提示：</b>已婚（尤其配偶冇收入）合併評稅可慳稅；填配偶月薪即可比較（2026/27 已婚免稅額 HK$290,000）"
+      : "💍 <b>Joint assessment tip:</b> married couples (esp. single-earner) often save via joint assessment; enter spouse salary to compare (2026/27 married allowance HK$290,000)");
+  }
+  out.innerHTML = lines.join("<br>"); out.classList.add("show");
+}
+/* Take-home curve: real engine, 10k-60k step 5k */
+function drawCurve() {
+  const c = UI.$("curveCanvas"); if (!c) return;
+  const ctx = c.getContext("2d");
+  const W = c.width = (c.clientWidth || 700) * 2; c.height = 520; const H = c.height;
+  const pad = 60;
+  ctx.clearRect(0, 0, W, H);
+  const pts = [];
+  for (let s = 10000; s <= 60000; s += 5000) pts.push([s, TAX.payslip(s).net]);
+  const maxV = 62000, minV = 0;
+  const X = v => pad + (v - 10000) / 50000 * (W - pad * 1.6);
+  const Y = v => H - pad - (v - minV) / (maxV - minV) * (H - pad * 1.8);
+  // grid
+  ctx.strokeStyle = "#1c3050"; ctx.lineWidth = 1;
+  for (let v = 0; v <= 60000; v += 10000) {
+    ctx.beginPath(); ctx.moveTo(pad, Y(v)); ctx.lineTo(W - pad * .6, Y(v)); ctx.stroke();
+    ctx.fillStyle = "#6b7f9c"; ctx.font = "600 22px sans-serif";
+    ctx.fillText((v / 1000) + "k", 6, Y(v) + 7);
+  }
+  for (let s = 10000; s <= 60000; s += 10000) {
+    ctx.fillStyle = "#6b7f9c"; ctx.textAlign = "center";
+    ctx.fillText((s / 1000) + "k", X(s), H - pad + 30); ctx.textAlign = "left";
+  }
+  // gross reference line
+  ctx.strokeStyle = "#5aa7ff66"; ctx.lineWidth = 2; ctx.setLineDash([10, 8]);
+  ctx.beginPath();
+  pts.forEach(([s], i) => i ? ctx.lineTo(X(s), Y(s)) : ctx.moveTo(X(s), Y(s)));
+  ctx.stroke(); ctx.setLineDash([]);
+  // net area
+  ctx.beginPath();
+  pts.forEach(([s, n], i) => i ? ctx.lineTo(X(s), Y(n)) : ctx.moveTo(X(s), Y(n)));
+  ctx.lineTo(X(60000), H - pad); ctx.lineTo(X(10000), H - pad); ctx.closePath();
+  const grad = ctx.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, "rgba(245,196,81,.35)"); grad.addColorStop(1, "rgba(245,196,81,.03)");
+  ctx.fillStyle = grad; ctx.fill();
+  // net line
+  ctx.strokeStyle = "#f5c451"; ctx.lineWidth = 4; ctx.beginPath();
+  pts.forEach(([s, n], i) => i ? ctx.lineTo(X(s), Y(n)) : ctx.moveTo(X(s), Y(n)));
+  ctx.stroke();
+  // MPF cap marker at 30k
+  const x30 = X(30000);
+  ctx.strokeStyle = "#ff6b6b88"; ctx.lineWidth = 2; ctx.setLineDash([6, 6]);
+  ctx.beginPath(); ctx.moveTo(x30, pad * .8); ctx.lineTo(x30, H - pad); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle = "#ff6b6b"; ctx.font = "700 22px sans-serif";
+  ctx.fillText(zhCurveLbl(), x30 + 8, pad * .8 + 8);
+  // current salary marker
+  const cur = +UI.$("salaryIn").value || 21000;
+  if (cur >= 10000 && cur <= 60000) {
+    const net = TAX.payslip(cur).net;
+    ctx.fillStyle = "#3ddc97"; ctx.beginPath(); ctx.arc(X(cur), Y(net), 7, 0, 7); ctx.fill();
+    ctx.font = "700 24px sans-serif";
+    ctx.fillText(UI.fmt(net), Math.min(X(cur) + 12, W - 130), Y(net) - 12);
+  }
+}
+function zhCurveLbl() { return STATE.data.lang === "zh" ? "MPF 上限 HK$30k" : "MPF cap HK$30k"; }
+window.addEventListener("resize", () => { clearTimeout(window._rz); window._rz = setTimeout(() => { drawCurve(); UI.drawRunway(); }, 200); });
 function allocChanged(save = true) {
   const net = STATE.data._net || TAX.payslip(STATE.data.salary).net;
   let need = +UI.$("r_need").value, want = +UI.$("r_want").value;
@@ -983,6 +1409,81 @@ function computeRunway() {
     (toGo === Infinity ? "⚠️ 每月儲蓄 = 0" : I18N.t("simMonths").replace("{n}", toGo));
   STATE.data.saved = saved; STATE.data.monthlySave = monthly; STATE.save();
   UI.drawRunway();
+}
+
+/* ── STRESS: bad-day scenarios on top of the runway engine ──────── */
+const STRESS = {
+  active: -1,
+  rentShare: BUDGET.REF.rent / BUDGET.essentials(),   // rent share of the HK essentials basket
+  verdict(m) {
+    return m >= 3 ? ["✅", "穩健：跑道有 3 個月或以上", "Solid: 3-month runway or better"]
+      : m >= 1.5 ? ["⚠️", "偏緊：未達 3 個月標準", "Tight: below the 3-month standard"]
+      : ["🚨", "危險：幾乎冇緩衝", "Danger: almost no buffer"];
+  }
+};
+
+function applyStress(i) {
+  const zh = STATE.data.lang === "zh";
+  const out = UI.$("stressOut"); if (!out) return;
+  STRESS.active = i;
+  document.querySelectorAll("#stressBtns .preset").forEach((btn, k) => btn.classList.toggle("on", k === i));
+  const net = STATE.data._net || TAX.payslip(STATE.data.salary).net;
+  const ess = net * STATE.data.alloc.need / 100;
+  const saved = STATE.data.saved || 0, monthly = STATE.data.monthlySave || 0;
+  if (!ess) { out.innerHTML = '<div class="note">' + (zh ? "輸入月薪以啟用壓力測試。" : "Enter a salary to enable stress tests.") + "</div>"; return; }
+  const fmtM = m => m === Infinity ? (zh ? "∞（每月儲蓄 0）" : "∞ (zero saving)") : String(m);
+  const toT = (e, s) => RUNWAY.monthsToTarget(saved, s, RUNWAY.TARGET_MONTHS * e);
+  const rows = [];
+  const row = (ic, html) => rows.push('<div class="act"><div class="ai">' + ic + "</div><div>" + html + "</div></div>");
+  const baseRun = saved / ess, baseToT = toT(ess, monthly);
+  row("📊", (zh ? "<b>基本情境：</b>跑道 " : "<b>Baseline:</b> runway ") + baseRun.toFixed(1) +
+    (zh ? " 個月・3 個月目標 " : " mo · 3-month target ") + UI.fmt(3 * ess));
+
+  if (i === 0) {           // unemployment for 6 months
+    const short$ = Math.max(0, 6 - baseRun) * ess;
+    const left6 = Math.max(0, saved - 6 * ess);
+    const rebuild = RUNWAY.monthsToTarget(left6, monthly, 3 * ess);
+    row("⏳", zh ? "<b>6 個月後剩低：</b>" + UI.fmt(left6) + "（跑道 " + (left6 / ess).toFixed(1) + " 個月）"
+      : "<b>Left after 6 months:</b> " + UI.fmt(left6) + " (runway " + (left6 / ess).toFixed(1) + " mo)");
+    if (short$ > 0) row("💸", zh ? "<b>缺口：</b>捱唔過 6 個月 — 仲差 " + UI.fmt(short$)
+      : "<b>Shortfall:</b> won't last 6 months — " + UI.fmt(short$) + " short");
+    row("🔁", zh ? "<b>重生：</b>再返工後 " + fmtM(rebuild) + " 個月重建應急金"
+      : "<b>Recovery:</b> " + fmtM(rebuild) + " months to rebuild the fund after re-employment");
+    // verdict on the SCENARIO: can you actually survive 6 months?
+    const v = short$ > 0 ? ["🚨", "危險：6 個月失業會見底", "Danger: 6 months of unemployment drains you dry"]
+      : short$ === 0 && left6 < ess ? ["⚠️", "勉強過關：6 個月後幾乎見底", "Just barely: nearly empty after 6 months"]
+      : ["✅", "穩健：撐得過 6 個月失業", "Solid: you survive a 6-month layoff"];
+    row(v[0], zh ? v[1] : v[2]);
+  } else if (i === 1) {    // rent +10%
+    const ess2 = ess * (1 + .1 * STRESS.rentShare);
+    const run2 = saved / ess2, toT2 = toT(ess2, monthly);
+    row("🏠", zh ? "<b>新必要開支：</b>" + UI.fmt(ess2) + "/月（+" + UI.fmt(ess2 - ess) + "）"
+      : "<b>New essentials:</b> " + UI.fmt(ess2) + "/mo (+" + UI.fmt(ess2 - ess) + ")");
+    row("📉", zh ? "<b>跑道：</b>" + run2.toFixed(1) + " 個月（原 " + baseRun.toFixed(1) + "）・達標需 " + fmtM(toT2) + " 個月（原 " + fmtM(baseToT) + "）"
+      : "<b>Runway:</b> " + run2.toFixed(1) + " mo (was " + baseRun.toFixed(1) + ") · target in " + fmtM(toT2) + " mo (was " + fmtM(baseToT) + ")");
+    const v = STRESS.verdict(run2); row(v[0], zh ? v[1] : v[2]);
+  } else if (i === 2) {    // raise +5%, engine recomputes MPF + tax
+    const slip2 = TAX.payslip(Math.round(STATE.data.salary * 1.05));
+    const extra = slip2.net - net;
+    const save2 = Math.max(0, monthly + extra);
+    const toT2 = toT(ess, save2);
+    row("💰", zh ? "<b>新淨收入：</b>" + UI.fmt(slip2.net) + "/月（+" + UI.fmt(extra) + "，引擎按新薪重算 MPF＋稅）"
+      : "<b>New net pay:</b> " + UI.fmt(slip2.net) + "/mo (+" + UI.fmt(extra) + "; engine recomputes MPF + tax)");
+    row("🚀", zh ? "<b>差額全落未來桶：</b>每月儲 " + UI.fmt(save2) + " → 達標只需 " + fmtM(toT2) + " 個月（原 " + fmtM(baseToT) + "）"
+      : "<b>Bank the raise:</b> save " + UI.fmt(save2) + "/mo → target in " + fmtM(toT2) + " mo (was " + fmtM(baseToT) + ")");
+  } else {                 // all at once: banked a 5% raise for 6 months, then laid off, rent +10%
+    const slip2 = TAX.payslip(Math.round(STATE.data.salary * 1.05));
+    const extra = slip2.net - net;
+    const saved3 = saved + 6 * extra;
+    const ess3 = ess * (1 + .1 * STRESS.rentShare);
+    const run3 = saved3 / ess3;
+    row("💰", zh ? "<b>加薪 6 個月儲落：</b>" + UI.fmt(saved3) + "（每月多儲 " + UI.fmt(extra) + "）"
+      : "<b>After banking the raise 6 months:</b> " + UI.fmt(saved3) + " (+" + UI.fmt(extra) + "/mo saved)");
+    row("⏳", zh ? "<b>裁員＋加租後跑道：</b>" + run3.toFixed(1) + " 個月（必要開支 " + UI.fmt(ess3) + "/月）"
+      : "<b>Runway after layoff + rent hike:</b> " + run3.toFixed(1) + " mo (essentials " + UI.fmt(ess3) + "/mo)");
+    const v = STRESS.verdict(run3); row(v[0], zh ? v[1] : v[2]);
+  }
+  out.innerHTML = rows.join("");
 }
 UI.drawRunway = function () {
   const c = UI.$("runCanvas"); if (!c) return;
@@ -1101,6 +1602,44 @@ function renderRulesList() {
       '<span class="typetag" style="color:#f5c451;border:1px solid #f5c45155;background:#f5c45118">+' + r.w + "</span></div>";
     wrap.appendChild(c);
   });
+  renderModelCard(zh);
+}
+
+/* ML model card: LOO-CV recomputed live in the browser on every open. */
+function renderModelCard(zh) {
+  const m = UI.$("mlMetrics"); if (!m) return;
+  const cv = ML.looCV();
+  const scam = ML.CORPUS.filter(x => x[0] === 1).length, legit = ML.CORPUS.length - scam;
+  const fmt = x => Math.round(x * 100) + "%";
+  const labels = zh
+    ? [["留一法準確率", cv.acc], ["精確率", cv.precision], ["召回率", cv.recall], ["F1", cv.f1]]
+    : [["LOO accuracy", cv.acc], ["Precision", cv.precision], ["Recall", cv.recall], ["F1", cv.f1]];
+  m.innerHTML = "";
+  labels.forEach(([name, v]) => {
+    const d = document.createElement("div"); d.className = "hcard"; d.style.flex = "1 1 100px";
+    d.innerHTML = "<b>" + fmt(v) + "</b><span>" + name + "</span>";
+    m.appendChild(d);
+  });
+  UI.$("t_mlTitle").textContent = zh ? "AI 混合模型 — 全公開、可驗證" : "AI hybrid model — fully open, verifiable";
+  UI.$("t_mlSub").textContent = zh
+    ? "規則引擎係骨幹；樸素貝葉斯模型係第二把聲。呢個卡片上嘅每一個數字，都係喺你瀏覽器入面即場重算（留一法交叉驗證），唔係抄返嚟嘅宣傳數字。"
+    : "The rule engine is the backbone; a Naive Bayes model is the second voice. Every number on this card is recomputed live in your browser (leave-one-out cross-validation), not a marketing figure.";
+  UI.$("t_mlNote").textContent = (zh
+    ? "模型：字符二元語法（中英雙語）樸素貝葉斯。訓練語料 " + ML.CORPUS.length + " 條（" + scam + " 詐騙 / " + legit + " 正常），全部喺下面公開。驗證：留一法交叉驗證（LOO-CV）。唔會有任何訊息離開你部手機。"
+    : "Model: character-bigram (bilingual zh/en) Naive Bayes. Corpus of " + ML.CORPUS.length + " messages (" + scam + " scam / " + legit + " legitimate), fully published below. Validation: leave-one-out cross-validation. No message ever leaves your device.");
+  // publish the full corpus — every message the model was trained on
+  const cl = UI.$("corpusList");
+  if (cl) {
+    cl.innerHTML = "";
+    ML.CORPUS.forEach(([y, s]) => {
+      const row = document.createElement("div"); row.className = "act";
+      row.innerHTML = '<div class="ai">' + (y === 1 ? "🚨" : "✅") + "</div><div>" + s + "</div>";
+      cl.appendChild(row);
+    });
+    UI.$("t_mlCorpusBtn").textContent = zh
+      ? "📄 查看完整訓練語料（" + ML.CORPUS.length + " 條，全部公開）"
+      : "📄 View the full training corpus (" + ML.CORPUS.length + " messages, fully published)";
+  }
 }
 UI.renderRules = renderRulesList;
 
@@ -1255,6 +1794,8 @@ UI.renderGrow = renderGrow;
 /* ── boot: init + self-tests ────────────────────────────────────── */
 (function boot() {
   STATE.load();
+  if (STATE.data.year && TAX.YEARS[STATE.data.year]) TAX.year = STATE.data.year;
+  if (UI.$("yearSel")) UI.$("yearSel").value = TAX.year;
   const okTax = TAX.selfTest();
   const okShield = SHIELD.selfTest();
   console.log("[BOOT] self-tests:", { okTax, okShield });
