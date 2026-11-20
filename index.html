@@ -385,6 +385,44 @@ h3.sec{font-size:14px;font-weight:800;color:var(--gold);letter-spacing:.5px;marg
     <div class="note" id="t_stressNote">情境模擬只作教育用途，唔構成投資建議。失業情境假設 MPF 累算權益不可動用、無失業保險（香港冇法定失業保險制度）。</div>
   </div>
 
+
+  <div class="card">
+    <h2><span class="n">✈️</span><span id="t_flTitle">第一份工起飛模擬器</span></h2>
+    <div class="sub" id="t_flSub">跑道唔止係「冇工幾耐」——由畢業前最後一個學期，到搏搵工、開工頭三個月，逐個月睇住你嘅結餘。香港上樓成本（兩按一上）、失去宿舍／學生優惠、MPF 同薪俸稅全部計入。即場轉情境，即場見後果。</div>
+
+    <div class="examples" id="flPersonas">
+      <button class="preset" id="fp_0" onclick="applyPersona(0)">🏠 畢業留守者</button>
+      <button class="preset" id="fp_1" onclick="applyPersona(1)">🧳 返鄉候鳥</button>
+      <button class="preset" id="fp_2" onclick="applyPersona(2)">📚 返學深造</button>
+    </div>
+
+    <div class="rangewrap" style="margin-top:12px">
+      <div class="rangeline"><span id="t_f_save">現有儲蓄</span><b id="fv_save">—</b></div>
+      <input type="range" id="f_save" min="0" max="120000" step="1000" value="25000" oninput="computeFlight()">
+      <div class="rangeline"><span id="t_f_salary">預期月薪</span><b id="fv_salary">—</b></div>
+      <input type="range" id="f_salary" min="10000" max="60000" step="500" value="21000" oninput="computeFlight()">
+      <div class="rangeline"><span id="t_f_hunt">搵工期（月）</span><b id="fv_hunt">—</b></div>
+      <input type="range" id="f_hunt" min="0" max="9" step="1" value="3" oninput="computeFlight()">
+      <div class="rangeline"><span id="f_f_hunt">畢業前月結餘（學生）</span><b id="fv_presave">—</b></div>
+      <input type="range" id="f_presave" min="-2000" max="6000" step="500" value="1000" oninput="computeFlight()">
+    </div>
+
+    <div class="examples" id="flCrises" style="margin-top:10px">
+      <button class="preset" id="fc_0" onclick="toggleCrisis(0)">⏳ Offer 遲 2 個月</button>
+      <button class="preset" id="fc_1" onclick="toggleCrisis(1)">📉 人工 −20%</button>
+      <button class="preset" id="fc_2" onclick="toggleCrisis(2)">💥 突發醫療 HK$5,000</button>
+    </div>
+
+    <div id="flightOut" style="margin-top:14px"></div>
+    <canvas id="flightCanvas" width="700" height="320" style="margin-top:12px"></canvas>
+    <div class="legend">
+      <span><i style="background:var(--gold)"></i><span id="t_f_lg1">結餘</span></span>
+      <span><i style="background:var(--line)"></i><span id="t_f_lg2">HK$0 危險線</span></span>
+      <span><i style="background:var(--mint)"></i><span id="t_f_lg3">開支</span></span>
+    </div>
+    <div class="note" id="t_flNote">模擬假設：畢業即搬出（兩按一上按 HK$6,800 租金 = 一個月按金×2＋一個月上期）；開工後淨收入由本應用 MPF＋薪俸稅引擎即場計算，唔係估；學期同搵工階段開支按 2025–26 香港學生生活成本。教育用途，唔構成財務建議。</div>
+  </div>
+
   <div class="card">
     <h2><span class="n">🛍️</span><span id="t_dealsTitle">慳家指南 — 第一個月的學生優惠</span></h2>
     <div class="sub" id="t_dealsSub">預算唔等於唔使錢，係使得聰明。香港學生優惠隨處都有，呢度係起步清單（優惠以官方平台為準）：</div>
@@ -1067,7 +1105,9 @@ const I18N = {
       bk1: "必要開支", bk2: "想要開支", bk3: "未來儲備",
       r_need: "必要開支", r_want: "想要開支",
       r_hint: "💡 香港參考：必要 50–60%（含租金 30–40%）、想要 15–25%、未來 20–25%。如果「未來」低過 15%，畫面會提醒你。",
-      runTitle: "🛡️ 你可以冇工幾耐？", runSub: "應急金 = 每月必要開支 × 3。呢個數字就係你嘅「人生跑道」。",
+      runTitle: "🛡️ 你可以冇工幾耐？",
+    flTitle: "✈️ 第一份工起飛模擬器（18 個月）",
+    flSub: "由畢業前最後一個學期，到搏搵工、開工頭三個月，逐個月睇結餘。兩按一上、失去學生優惠、MPF 同薪俸稅全部計入。", runSub: "應急金 = 每月必要開支 × 3。呢個數字就係你嘅「人生跑道」。",
       lg_saved: "已儲蓄", lg_target: "3 個月目標", lg_proj: "每月儲蓄軌跡",
       simTitle: "儲蓄模擬器", r_save: "每月儲", r_start: "現有儲蓄", unit: "個月",
       shTitle: "🚨 防騙護盾",
@@ -1108,7 +1148,9 @@ const I18N = {
       bk1: "Needs", bk2: "Wants", bk3: "Future",
       r_need: "Needs", r_want: "Wants",
       r_hint: "💡 HK reference: needs 50–60% (incl. rent 30–40%), wants 15–25%, future 20–25%. Below 15% future triggers a warning.",
-      runTitle: "🛡️ How long can you survive without a job?", runSub: "Emergency fund = monthly essentials × 3. That number is your life runway.",
+      runTitle: "🛡️ How long can you survive without a job?",
+    flTitle: "✈️ First-Job Flight Simulator (18 months)",
+    flSub: "From your final term, through the job hunt, to your first employed months — your balance, month by month. Move-in deposit, lost student subsidies, MPF and salaries tax all included.", runSub: "Emergency fund = monthly essentials × 3. That number is your life runway.",
       lg_saved: "Saved", lg_target: "3-month target", lg_proj: "Monthly saving path",
       simTitle: "Savings simulator", r_save: "Save per month", r_start: "Current savings", unit: "months",
       shTitle: "🚨 Scam Shield",
@@ -1153,7 +1195,7 @@ const UI = {
     document.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c.dataset.s === s));
     document.querySelectorAll(".fbtn").forEach(c => c.classList.toggle("on", c.dataset.s === s));
     window.scrollTo({ top: 0 });
-    if (s === "runway") this.drawRunway();
+    if (s === "runway") { this.drawRunway(); if (typeof computeFlight === "function") computeFlight(); }
     if (s === "rules") this.renderRules();
   },
 
@@ -1190,6 +1232,13 @@ const UI = {
     this.$("t_r_need").textContent = T("r_need"); this.$("t_r_want").textContent = T("r_want");
     this.$("t_r_hint").textContent = T("r_hint");
     this.$("t_runTitle").textContent = T("runTitle"); this.$("t_runSub").textContent = T("runSub");
+    this.$("t_flTitle").textContent = T("flTitle"); this.$("t_flSub").textContent = T("flSub");
+    ["f_save:你而家儲咗|Savings now", "f_salary:預期月薪|Expected salary", "f_hunt:頵工期（月）|Job hunt (months)", "f_presave:畢業前月結餘|Student monthly surplus"].forEach(pair => {
+      const [id, labels] = pair.split(":"); const [z, e] = labels.split("|");
+      const el = document.querySelector(`label[for="${id}"]`) || null; if (el) el.textContent = zh ? z : e;
+    });
+    if (typeof computeFlight === "function") computeFlight();
+
     this.$("t_lg_saved").textContent = T("lg_saved"); this.$("t_lg_target").textContent = T("lg_target"); this.$("t_lg_proj").textContent = T("lg_proj");
     this.$("t_simTitle").textContent = T("simTitle"); this.$("t_r_save").textContent = T("r_save"); this.$("t_r_start").textContent = T("r_start");
     this.$("runUnit").textContent = T("unit");
@@ -1431,6 +1480,185 @@ const STRESS = {
       : ["🚨", "危險：幾乎冇緩衝", "Danger: almost no buffer"];
   }
 };
+
+
+/* ── FLIGHT: first-job flight simulator (18-month, HK lifecycle) ──
+   Phases: T = final student term months, H = job-hunt months, E = employed.
+   Employed take-home uses the real TAX engine (MPF + salaries tax), so the
+   net is the same number the Pay tab shows for the same salary. */
+const FLIGHT = {
+  DEPOSIT: 6800 * 3,        // 兩按一上 on a HK$6,800 shared-flat room
+  SUB_LOSS: 900,            // lost campus meal/transit subsidies per month when graduating
+  MONTHS: 18,
+  personas: [
+    { id: 0, zh: "畢業留守者", en: "Stay-in-HK grad",
+      descZh: "留港搵工・租樓・預期 HK$21,000", descEn: "Job hunt in HK, rent a room, expect HK$21,000",
+      savings: 25000, salary: 21000, hunt: 3, presave: 1000 },
+    { id: 1, zh: "返鄉候鳥", en: "Return-home grad",
+      descZh: "返屋企住慳租金・但儲蓄起點低", descEn: "Live with family, low rent, smaller savings",
+      savings: 8000, salary: 18000, hunt: 4, presave: 1500 },
+    { id: 2, zh: "返學深造", en: "Back-to-school grad",
+      descZh: "讀埋 master 先入行・搵工耐但起薪高", descEn: "Master first, longer hunt, higher start pay",
+      savings: 32000, salary: 26000, hunt: 6, presave: 0 }
+  ],
+  crises: [false, false, false],
+
+  /* month 0..17; returns {balance[], spend[], phases[]} */
+  simulate(savings, salary, hunt, presave) {
+    const crisisDelay = this.crises[0] ? 2 : 0;
+    const effSalary = this.crises[1] ? Math.round(salary * .8) : salary;
+    const shock = this.crises[2] ? 5000 : 0;
+    const huntM = hunt + crisisDelay;
+    const ess = BUDGET.essentials();            // rent+food+transport+bills (HK basket)
+    const studentSpend = ess - 1500;            // student housing/subsidies: cheaper
+    const net = TAX.payslip(effSalary).net;     // REAL take-home from our tax engine
+    const employedSpend = ess * 1.0;
+    const bal = [], spend = [], phase = [];
+    let b = savings + shock * 0;                // shock hits at month 4 below
+    for (let m = 0; m < this.MONTHS; m++) {
+      if (m === 0) b -= this.DEPOSIT;           // 兩按一上 paid on move-out
+      if (m === 4) b -= shock;                  // emergency lands early in the hunt
+      if (m < 2) { phase.push("T"); spend.push(studentSpend); b += presave - studentSpend; }
+      else if (m < 2 + huntM) { phase.push("H"); spend.push(ess + this.SUB_LOSS); b -= ess + this.SUB_LOSS; }
+      else { phase.push("E"); spend.push(employedSpend); b += net - employedSpend; }
+      bal.push(Math.round(b));
+    }
+    return { bal, spend, phase, net, huntM, effSalary };
+  },
+
+  /* readiness score 0–100: buffer depth, never-negative, phase survived */
+  score(savings, salary, hunt, presave) {
+    const r = this.simulate(savings, salary, hunt, presave);
+    const minBal = Math.min(...r.bal);
+    const finalBal = r.bal[r.bal.length - 1];
+    let s = 0;
+    if (minBal >= 0) s += 40; else if (minBal > -8000) s += 20; else s += 0;
+    const employedM = r.phase.filter(p => p === "E").length;
+    s += Math.min(30, employedM * 3);                 // reached + kept employment
+    if (finalBal >= 3 * BUDGET.essentials()) s += 20; // 3-month fund at the end
+    else if (finalBal >= 1.5 * BUDGET.essentials()) s += 10;
+    s += Math.min(10, Math.round(savings / 6000));    // starting cushion
+    return Math.max(0, Math.min(100, s));
+  },
+
+  verdict(minBal, finalBal) {
+    if (minBal < 0 && finalBal < 0) return ["🚨", "墜落：全程跌穿 HK$0 — 未起飛先失控", "CRITICAL: below HK$0 through the run"];
+    if (minBal < 0) return ["⚠️", "顛簸：中途見負 but 收復失地", "BUMPY: dips below zero, then recovers"];
+    if (finalBal >= 3 * BUDGET.essentials()) return ["✅", "平穩起飛：全程正數，仲儲到 3 個月應急金", "SAFE: positive throughout, ends with a 3-month fund"];
+    return ["🛫", "起飛：全程正數，繼續儲", "AIRBORNE: positive throughout, keep saving"];
+  },
+
+  selfTest() {
+    // deterministic invariants on the default persona
+    const r = this.simulate(25000, 21000, 3, 1000);
+    const cases = [];
+    cases.push(["deposit hits month0", r.bal[0] < 25000 - 18000]);          // 25k − 20.4k dep − student month
+    const r2 = this.simulate(25000, 21000, 3, 1000); this.crises[0] = true;
+    const r3 = this.simulate(25000, 21000, 3, 1000); this.crises[0] = false;
+    cases.push(["delay extends hunt", r3.phase.filter(p => p === "H").length === r2.phase.filter(p => p === "H").length + 2]);
+    const net = TAX.payslip(21000).net;
+    const rE = r.phase.indexOf("E"); const rE2 = r.phase.indexOf("E") + 1;
+    cases.push(["employed delta = net − spend",
+      Math.abs((r.bal[rE2] - r.bal[rE]) - (net - r.spend[rE2])) <= 2]);
+    const s = this.score(25000, 21000, 3, 1000);
+    cases.push(["score in 0..100", s >= 0 && s <= 100]);
+    return cases.every(c => c[1]);
+  }
+};
+
+function applyPersona(i) {
+  const p = FLIGHT.personas[i];
+  document.querySelectorAll("#flPersonas .preset").forEach((b, k) => b.classList.toggle("on", k === i));
+  UI.$("f_save").value = p.savings; UI.$("f_salary").value = p.salary;
+  UI.$("f_hunt").value = p.hunt; UI.$("f_presave").value = p.presave;
+  computeFlight();
+}
+
+function toggleCrisis(i) {
+  FLIGHT.crises[i] = !FLIGHT.crises[i];
+  document.getElementById("fc_" + i).classList.toggle("on", FLIGHT.crises[i]);
+  computeFlight();
+}
+
+function computeFlight() {
+  const zh = STATE.data.lang === "zh";
+  const savings = +UI.$("f_save").value, salary = +UI.$("f_salary").value;
+  const hunt = +UI.$("f_hunt").value, presave = +UI.$("f_presave").value;
+  UI.$("fv_save").textContent = UI.fmt(savings);
+  UI.$("fv_salary").textContent = UI.fmt(salary);
+  UI.$("fv_hunt").textContent = hunt + (zh ? " 個月" : " mo");
+  UI.$("fv_presave").textContent = (presave >= 0 ? "+" : "") + UI.fmt(presave);
+  const r = FLIGHT.simulate(savings, salary, hunt, presave);
+  const minBal = Math.min(...r.bal), finalBal = r.bal[r.bal.length - 1];
+  const score = FLIGHT.score(savings, salary, hunt, presave);
+  const [ic, vzh, ven] = FLIGHT.verdict(minBal, finalBal);
+  const employed = r.phase[r.phase.length - 1] === "E";
+  const days = finalBal > 0 ? Math.round(finalBal / BUDGET.essentials() * 30) : 0;
+  const bufferTxt = employed
+    ? (finalBal > 0
+        ? (zh ? "相等 " : "≈ ") + days + (zh ? " 日緩衝" : " days buffer")
+        : (zh ? "已開工但結餘見負" : "employed but in the red"))
+    : (zh ? "18 個月內未上崗" : "no job within 18 months");
+  const ph = m => m === "T" ? (zh ? "學期" : "Term") : m === "H" ? (zh ? "搵工" : "Hunt") : (zh ? "開工" : "Job");
+  const kpi = (label, val, sub) => `<div class="ms"><div class="mi">${ic}</div><div><b>${label}</b><span>${val}</span><small>${sub || ""}</small></div></div>`;
+  UI.$("flightOut").innerHTML =
+    `<div class="subnum" style="margin-bottom:10px">${ic} <b>${zh ? vzh : ven}</b></div>` +
+    `<div class="milestones" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">` +
+    kpi(zh ? "起飛準備度" : "Readiness", score + " / 100", zh ? "0–100 分（緩衝＋就業＋終點儲蓄）" : "0–100 (buffer + employment + ending fund)") +
+    kpi(zh ? "最低結餘" : "Lowest balance", UI.fmt(minBal), minBal < 0 ? (zh ? "跌穿 HK$0" : "below HK$0") : (zh ? "全程正數" : "never negative")) +
+    kpi(zh ? "18 個月後" : "After 18 months", UI.fmt(finalBal), bufferTxt) +
+    kpi(zh ? "開工淨收入" : "Employed net", UI.fmt(r.net) + (zh ? "/月" : "/mo"), zh ? "MPF＋薪俸稅即場計" : "live MPF + salaries tax") +
+    `</div><div class="sub" style="margin-top:8px">${zh ? "階段：2 個月學期 → " + r.huntM + " 個月搵工 → 開工（" + ph("E") + "）" : "Phases: 2 term months → " + r.huntM + " hunt months → employed"}</div>`;
+  drawFlight(r);
+}
+
+function drawFlight(r) {
+  const cv = UI.$("flightCanvas"); if (!cv) return;
+  const dpr = window.devicePixelRatio || 1;
+  if (cv.width !== 700 * dpr) { cv.width = 700 * dpr; cv.height = 320 * dpr; }
+  const c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  c.clearRect(0, 0, 700, 320);
+  const W = 660, H = 240, X0 = 30, Y0 = 275, n = FLIGHT.MONTHS;
+  const lo = Math.min(0, ...r.bal) * 1.1, hi = Math.max(...r.bal, 10000) * 1.08;
+  const y = v => Y0 - (v - lo) / (hi - lo) * H;
+  const x = m => X0 + m / (n - 1) * W;
+  // phase bands
+  const bandCol = { T: "rgba(120,140,180,.10)", H: "rgba(230,120,60,.10)", E: "rgba(60,190,150,.10)" };
+  let m0 = 0;
+  for (let m = 1; m <= n; m++) {
+    if (m === n || r.phase[m] !== r.phase[m0]) {
+      c.fillStyle = bandCol[r.phase[m0]];
+      c.fillRect(x(m0), Y0 - H, x(m - (m === n ? 0 : 0.999)) - x(m0) + 1, H);
+      m0 = m;
+    }
+  }
+  // grid + zero line
+  c.strokeStyle = "rgba(255,255,255,.08)"; c.lineWidth = 1;
+  for (let g = 0; g <= 4; g++) { const gy = Y0 - H * g / 4; c.beginPath(); c.moveTo(X0, gy); c.lineTo(X0 + W, gy); c.stroke(); }
+  c.strokeStyle = "rgba(255,255,255,.45)"; c.setLineDash([5, 4]);
+  c.beginPath(); c.moveTo(X0, y(0)); c.lineTo(X0 + W, y(0)); c.stroke(); c.setLineDash([]);
+  c.fillStyle = "rgba(255,255,255,.55)"; c.font = "11px system-ui"; c.textAlign = "left";
+  c.fillText("HK$0", X0 + 2, y(0) - 4);
+  // spend line
+  c.strokeStyle = "rgba(94,215,177,.75)"; c.lineWidth = 2; c.beginPath();
+  r.spend.forEach((s, m) => m ? c.lineTo(x(m), y(s)) : c.moveTo(x(m), y(s))); c.stroke();
+  // balance area + line
+  const grad = c.createLinearGradient(0, Y0 - H, 0, Y0);
+  grad.addColorStop(0, "rgba(245,196,81,.35)"); grad.addColorStop(1, "rgba(245,196,81,0)");
+  c.beginPath(); c.moveTo(x(0), y(r.bal[0]));
+  r.bal.forEach((v, m) => c.lineTo(x(m), y(v)));
+  c.lineTo(x(n - 1), y(Math.max(lo, 0))); c.lineTo(x(0), y(Math.max(lo, 0))); c.closePath();
+  c.fillStyle = grad; c.fill();
+  c.strokeStyle = "#f5c451"; c.lineWidth = 2.5; c.beginPath();
+  r.bal.forEach((v, m) => m ? c.lineTo(x(m), y(v)) : c.moveTo(x(m), y(v))); c.stroke();
+  // min marker
+  const minI = r.bal.indexOf(Math.min(...r.bal));
+  c.fillStyle = "#ff6b6b"; c.beginPath(); c.arc(x(minI), y(r.bal[minI]), 4, 0, 7); c.fill();
+  // x labels
+  c.fillStyle = "rgba(255,255,255,.55)"; c.textAlign = "center"; c.font = "10px system-ui";
+  for (let m = 0; m < n; m += 3) c.fillText("M" + m, x(m), Y0 + 14);
+}
+
 
 function applyStress(i) {
   const zh = STATE.data.lang === "zh";
@@ -1824,8 +2052,11 @@ UI.renderGrow = renderGrow;
   const okTax = TAX.selfTest();
   const okShield = SHIELD.selfTest();
   console.log("[BOOT] self-tests:", { okTax, okShield });
-  window.__SELFTEST__ = { okTax, okShield };   // exposed for E2E verification
+  const okFlight = FLIGHT.selfTest();
+  window.__SELFTEST__ = { okTax, okShield, okFlight };   // exposed for E2E verification
+  if (!okFlight) console.warn("FLIGHT self-test failed");
   UI.$("salaryIn").value = STATE.data.salary;
+  if (UI.$("f_salary")) { UI.$("f_salary").value = Math.max(10000, Math.min(60000, STATE.data.salary)); computeFlight(); }
   UI.$("r_need").value = STATE.data.alloc.need;
   UI.$("r_want").value = STATE.data.alloc.want;
   UI.$("r_start").value = STATE.data.saved;

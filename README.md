@@ -6,21 +6,6 @@ A mobile-first web app for final-year Hong Kong students facing their **first pa
 
 > Everything runs in **one self-contained HTML file**. No build step, no backend, no API keys, no tracking. Open `index.html` and it works — even offline after first load.
 
-## 🔗 Live demo
-
-**👉 <https://mir-ashiq.github.io/FirstPayHK/>**
-
-Hosted free on GitHub Pages — same code as `index.html` in this repo. Open it on your phone; everything (tax engine, Scam Shield, charts) runs locally in your browser. Works offline after first load.
-
-| Screen | Preview |
-|---|---|
-| Home — 90-day journey | ![Home](docs/screenshots/screenshot_home.png) |
-| Pay — payslip + worked example | ![Pay](docs/screenshots/screenshot_pay.png) |
-| Shield — hybrid risk check | ![Shield](docs/screenshots/screenshot_shield.png) |
-| Runway — emergency fund | ![Runway](docs/screenshots/screenshot_runway.png) |
-| Stress tests (EN) | ![Stress](docs/screenshots/screenshot_stress_en.png) |
-| ML model card | ![Model card](docs/screenshots/screenshot_modelcard.png) |
-
 ---
 
 ## Quick start
@@ -45,6 +30,7 @@ Demo mode loads a **synthetic persona** ("阿芝 / Cherry", 22, first job HK$21,
 | 💰 **Pay 人工** | Gross → net: MPF + salaries tax computed live, with a printed worked example, **bonus months, self-education & donation deductions, joint-assessment comparison, and a 10k–60k take-home curve** — switchable 2025/26 ⇄ 2026/27 | MPF: 5% employee / 5% employer, floor HK$7,100, cap HK$1,500 (MPFA). Tax: basic allowance HK$132,000 (2025/26) / HK$145,000 (2026/27), married HK$264,000 / HK$290,000, progressive 2/6/10/14/17% vs two-tier standard rate 15%/16% (first HK$5M), lower wins (IRD) |
 | ⚖️ **Budget 三個錢桶** | Needs / Wants / Future buckets seeded from real HK graduate costs (not the US 50/30/20) | Rent HK$6,800 (shared flat), food HK$2,800, transport HK$800 (2025–26 student cost surveys) |
 | 🛡️ **Runway 跑道** | Emergency-fund target = 3× monthly essentials; survival months; savings trajectory chart; **stress tests: 6-month layoff / rent +10% / raise +5% / all at once** with scenario-specific verdicts | 3–6 month emergency fund guidance (MPFA/IFEC financial-education standard); HK has no statutory unemployment insurance (stated in-app) |
+| ✈️ **First-Job Flight Simulator 起飛模擬器** | 18-month month-by-month cash simulation across three life phases — final term 學期 → job hunt 搵工 → employed 開工 — with a **0–100 readiness score**, lowest-balance KPI, survival-buffer days, phase-banded timeline chart with a HK$0 cliff line, 3 HK persona presets (畢業留守者／返鄉候鳥／返學深造), and crisis toggles (offer +2 months, salary −20%, HK$5,000 medical shock). Employed take-home is computed live by the app's own **MPF + salaries-tax engine** — not a hardcoded net number | Move-in cost modelled as **兩按一上** (2 months deposit + 1 month advance on a HK$6,800 shared-flat room); loss of campus meal/transit subsidies (~HK$900/mo) on graduation; HK 2025–26 student cost basket (rent 6,800 / food 2,800 / transport 800 / bills 500) |
 | 🚨 **Scam Shield 防騙護盾** | Paste any SMS/WhatsApp → instant risk score 0–100, red-flag phrases, typology, next actions, hotlines. **Hybrid: rules + on-device Naive Bayes** | **24 transparent rules / 5 typologies** built from ADCC-published tactics incl. 2025–26 emerging tactics (deepfake/trojan app, boss impersonation, rental deposit, gift cards) — 43,212 cases in 2025; e-shopping fraud #1 at 12,505 cases / 28.9% |
 | 🌱 **Grow 投資自己** | Self-investment ledger with payback math, ROI framing with disclaimers | — |
 | 📝 **Weekly Check-in + Quests + 90-day journey** | The habit loop: log weekly spending, complete quests, unlock 6 milestones | — |
@@ -65,6 +51,7 @@ index.html
 ├── TAX      — IRD-method salaries tax + MPF (band-by-band, self-tested)
 ├── BUDGET   — HK-realistic bucket engine
 ├── RUNWAY   — emergency-fund math
+├── FLIGHT   — 18-month first-job flight simulator (phases, readiness score, crises)
 ├── SHIELD   — 24-rule transparent scam engine + 5 worked examples
 ├── ML       — on-device Naive Bayes (binarized bigrams, LOO-CV model card)
 ├── STRESS   — bad-day scenarios on top of RUNWAY + TAX engines
@@ -73,23 +60,7 @@ index.html
 └── UI       — rendering, journey, navigation
 ```
 
-**Self-tests run on every load** (`window.__SELFTEST__` in the console): tax engine against IRD-verified cases (2025/26 and 2026/27, bonus, deductions, joint assessment, two-tier standard rate), shield engine against the 5 worked examples, ML LOO-CV quality gate. **52/52 automated E2E checks pass** (navigation, tax v2 math, stress scenarios, hybrid shield + model card + published corpus, ledger, check-in, i18n, persistence). Expected values cross-checked against an independent Python reference implementation ([`reference/tax_reference.py`](reference/tax_reference.py)). Run them yourself:
-
-```sh
-pip install playwright && playwright install chromium
-python3 tests/run_e2e.py
-```
-
-## Repo layout
-
-```
-index.html              ← the whole app (open it / deployed by GitHub Pages)
-docs/screenshots/       ← the six screenshots above
-tests/run_e2e.py        ← Playwright runner for the 52-check E2E suite
-tests/e2e_test.js       ← the suite itself (runs in-page, no deps)
-reference/tax_reference.py  ← independent Python tax reference used to verify the JS engine
-SUBMISSION.md           ← Devpost submission kit + 5-min demo video script
-```
+**Self-tests run on every load** (`window.__SELFTEST__` in the console): tax engine against IRD-verified cases (2025/26 and 2026/27, bonus, deductions, joint assessment, two-tier standard rate), shield engine against the 5 worked examples, ML LOO-CV quality gate, and the flight simulator's cash-walk invariants (deposit timing, crisis deltas, phase math). **66/66 automated E2E checks pass** — 52 legacy checks (navigation, tax v2 math, stress scenarios, hybrid shield + model card + published corpus, ledger, check-in, i18n, persistence) plus 14 flight-simulator checks (engine matches an independent reference implementation, personas, all three crises, readiness bounds, canvas rendering, bilingual switch). Expected values cross-checked against an independent Python reference implementation (`scripts/tax_reference.py` in the build repo).
 
 ## Data & assumptions
 
