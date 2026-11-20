@@ -289,9 +289,10 @@ h3.sec{font-size:14px;font-weight:800;color:var(--gold);letter-spacing:.5px;marg
       <div class="sliprow"><span class="k" id="t_s_gross">月薪（毛收入）</span><span class="v" id="v_gross">—</span></div>
       <div class="sliprow"><span class="k" id="t_s_mpf">MPF 僱員供款（5%）</span><span class="v neg" id="v_mpf">—</span></div>
       <div class="sliprow"><span class="k" id="t_s_tax">薪俸稅（每月攤分）</span><span class="v neg" id="v_taxM">—</span></div>
+      <div class="sliprow" style="opacity:.85"><span class="k" id="t_s_eff">有效稅率（年薪稅款 ÷ 年毛收入）</span><span class="v" id="v_eff">—</span></div>
       <div class="sliprow"><span class="k" id="t_s_employer">＋ 僱主 MPF 供款（5%，另計）</span><span class="v" id="v_mpfEr" style="color:var(--mint)">—</span></div>
       <div class="sliprow total"><span class="k" id="t_s_net">每月實收（大約）</span><span class="v" id="v_net">—</span></div>
-      <div class="note" id="t_s_note">計法：MPF 僱員供款 = 相關入息 5%（月入上限 HK$30,000，即最多 HK$1,500）；應課稅入息 = 年收入 − MPF 強制供款 − 免稅額；累進稅階 2/6/10/14/17%，與兩級標準稅率（首 HK$500 萬 15%、其後 16%）取低者。假設：無花紅、無其他扣除、單身非合併評稅。<a href="https://www.ird.gov.hk" target="_blank" rel="noopener">稅務局 ird.gov.hk</a></div>
+      <div class="note" id="t_s_note">計法：MPF 僱員供款 = 相關入息 5%（月入上限 HK$30,000，即最多 HK$1,500）；應課稅入息 = 年收入 − MPF 強制供款 − 免稅額；累進稅階 2/6/10/14/17%，與兩級標準稅率（首 HK$500 萬 15%、其後 16%）取低者。假設：無花紅、無其他扣除、單身非合併評稅。僅計薪俸入息——自僱／freelance、租金、股息收入不在此模型內，暫不反映暫繳稅時間；涉及其他收入請諮詢稅務專業。<a href="https://www.ird.gov.hk" target="_blank" rel="noopener">稅務局 ird.gov.hk</a></div>
       <div class="note" id="t_s_worked" style="border:1px dashed var(--gold2);border-radius:10px;padding:10px 12px;margin-top:8px">✏️ <b>計算示例（月薪 HK$26,000・2026/27）：</b>年收入 312,000 − MPF 15,600 − 免稅額 145,000 = 應課稅入息 151,400。稅階：50,000×2% + 50,000×6% + 50,000×10% + 1,400×14% = 1,000 + 3,000 + 5,000 + 196 = <b>HK$9,196/年（HK$766/月）</b>，低於標準稅率 44,460，故用累進制。</div>
     </div>
 
@@ -452,9 +453,10 @@ h3.sec{font-size:14px;font-weight:800;color:var(--gold);letter-spacing:.5px;marg
     <h2><span class="n">🤖</span><span id="t_mlTitle">AI 混合模型 — 全公開、可驗證</span></h2>
     <div class="sub" id="t_mlSub">規則引擎係骨幹；樸素貝葉斯模型係第二把聲。呢個卡片上嘅每一個數字，都係喺你瀏覽器入面即場重算（留一法交叉驗證），唔係抄返嚟嘅宣傳數字。</div>
     <div id="mlMetrics" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"></div>
-    <div class="note" id="t_mlNote">模型：字符二元語法（中英雙語）樸素貝葉斯。訓練語料 {N} 條（{S} 詐騙 / {L} 正常），全部喺下面公開。驗證：留一法交叉驗證（LOO-CV）。唔會有任何訊息離開你部手機。</div>
+    <div class="note" id="t_mlNote">模型：字符二元語法（中英雙語）樸素貝葉斯。訓練語料 73 條（43 詐騙 / 30 正常），全部喺下面公開。驗證：留一法交叉驗證（LOO-CV）。唔會有任何訊息離開你部手機。</div>
+    <div id="mlConfusion" style="margin-top:10px"></div>
     <details style="margin-top:10px" id="corpusBox">
-      <summary style="cursor:pointer;color:var(--gold);font-weight:700;font-size:13px" id="t_mlCorpusBtn">📄 查看完整訓練語料（全部公開）</summary>
+      <summary style="cursor:pointer;color:var(--gold);font-weight:700;font-size:13px" id="t_mlCorpusBtn">📄 查看完整訓練語料（73 條，全部公開）</summary>
       <div id="corpusList" style="margin-top:10px"></div>
     </details>
   </div>
@@ -1059,6 +1061,7 @@ const I18N = {
       payTitle: "💰 第一份糧，實收幾多？", paySub: "輸入月薪，我哋按香港真實規則計 MPF 同薪俸稅，話你知真正落袋幾多。",
       grossLbl: "月薪（港幣，未扣款）",
       s_gross: "月薪（毛收入）", s_mpf: "MPF 僱員供款（5%）", s_tax: "薪俸稅（每月攤分）",
+      s_eff: "有效稅率（年薪稅款 ÷ 年毛收入）",
       s_employer: "＋ 僱主 MPF 供款（5%，另計）", s_net: "每月實收（大約）",
       allocTitle: "三個錢桶 — 香港版", allocSub: "唔係美國 50/30/20。香港租金食人工 30–40%，我哋用香港畢業生真實開支分佈做起點，你可以自己拉。",
       bk1: "必要開支", bk2: "想要開支", bk3: "未來儲備",
@@ -1099,6 +1102,7 @@ const I18N = {
       payTitle: "💰 First paycheck: what lands in your account?", paySub: "Enter your monthly salary. We compute MPF and salaries tax under real Hong Kong rules to show true take-home pay.",
       grossLbl: "Monthly salary (HKD, before deductions)",
       s_gross: "Monthly gross", s_mpf: "MPF employee contribution (5%)", s_tax: "Salaries tax (monthly spread)",
+      s_eff: "Effective tax rate (annual tax ÷ annual gross)",
       s_employer: "+ Employer MPF (5%, extra)", s_net: "Monthly take-home (approx.)",
       allocTitle: "Three buckets — Hong Kong edition", allocSub: "Not the American 50/30/20. Hong Kong rent eats 30–40% of a graduate salary, so we start from real HK graduate spending and let you drag.",
       bk1: "Needs", bk2: "Wants", bk3: "Future",
@@ -1179,6 +1183,7 @@ const UI = {
     this.$("t_grossLbl").textContent = T("grossLbl");
     this.$("t_s_gross").textContent = T("s_gross"); this.$("t_s_mpf").textContent = T("s_mpf");
     this.$("t_s_tax").textContent = T("s_tax"); this.$("t_s_employer").textContent = T("s_employer");
+    this.$("t_s_eff").textContent = T("s_eff");
     this.$("t_s_net").textContent = T("s_net");
     this.$("t_allocTitle").textContent = T("allocTitle"); this.$("t_allocSub").textContent = T("allocSub");
     this.$("t_bk1").textContent = T("bk1"); this.$("t_bk2").textContent = T("bk2"); this.$("t_bk3").textContent = T("bk3");
@@ -1218,8 +1223,8 @@ const UI = {
     this.$("t_gs3") && (this.$("t_gs3").textContent = T("gs3")); this.$("t_gs4") && (this.$("t_gs4").textContent = T("gs4"));
     // static notes (zh keep, en swap)
     this.$("t_s_note").innerHTML = zh
-      ? '計法：MPF 僱員供款 = 相關入息 5%（月入上限 HK$30,000，即最多 HK$1,500）；應課稅入息 = 年收入 − MPF 強制供款 − 基本免稅額 HK$132,000；累進稅階 2/6/10/14/17%，與標準稅率 15%（按扣除 MPF 後入息）取低者。假設：無花紅、無其他扣除、單身非合併評稅。<a href="https://www.ird.gov.hk" target="_blank" rel="noopener">稅務局 ird.gov.hk</a>'
-      : 'Method: MPF employee contribution = 5% of relevant income (cap HK$30,000/mo → max HK$1,500). Chargeable income = annual gross − mandatory MPF − basic allowance HK$132,000. Progressive bands 2/6/10/14/17% vs 15% standard rate on income after MPF; you pay the lower. Assumes: no bonus, no other deductions, single (non-joint) assessment. <a href="https://www.ird.gov.hk" target="_blank" rel="noopener">IRD ird.gov.hk</a>';
+      ? '計法：MPF 僱員供款 = 相關入息 5%（月入上限 HK$30,000，即最多 HK$1,500）；應課稅入息 = 年收入 − MPF 強制供款 − 基本免稅額 HK$132,000；累進稅階 2/6/10/14/17%，與標準稅率 15%（按扣除 MPF 後入息）取低者。假設：無花紅、無其他扣除、單身非合併評稅。僅計薪俸入息——自僱／freelance、租金、股息收入不在此模型內，暫不反映暫繳稅時間；涉及其他收入請諮詢稅務專業。<a href="https://www.ird.gov.hk" target="_blank" rel="noopener">稅務局 ird.gov.hk</a>'
+      : 'Method: MPF employee contribution = 5% of relevant income (cap HK$30,000/mo → max HK$1,500). Chargeable income = annual gross − mandatory MPF − basic allowance HK$132,000. Progressive bands 2/6/10/14/17% vs 15% standard rate on income after MPF; you pay the lower. Assumes: no bonus, no other deductions, single (non-joint) assessment. Salaries only — freelance, rental or dividend income is not covered; provisional tax timing is not modelled. For advice on other income, consult a tax professional. <a href="https://www.ird.gov.hk" target="_blank" rel="noopener">IRD ird.gov.hk</a>';
     this.$("t_runNote").textContent = zh
       ? "失業跑道 = 應急金 ÷ 每月必要開支。目標 3 個月係香港理財教育通用建議（積金局／投委會）。呢個模擬唔包括失業保險或強積金累算權益。"
       : "Unemployment runway = emergency fund ÷ monthly essentials. The 3-month target is standard HK financial-education guidance (MPFA/IFEC). Excludes unemployment insurance and MPF accrued benefits.";
@@ -1254,6 +1259,8 @@ const UI = {
       : ["💼 6-month layoff", "🏠 Rent +10%", "📈 Raise +5%", "🔁 All at once"];
     ["sb_0", "sb_1", "sb_2", "sb_3"].forEach((id, k) => { const b = this.$(id); b && (b.textContent = sbLbl[k]); });
     if (STRESS.active >= 0) applyStress(STRESS.active);   // re-render active scenario in the new language
+    // re-render the rules/model-card screen if it is the active screen (its strings are built in renderModelCard)
+    if (document.querySelector("#s-rules.on")) this.renderRules();
     this.$("t_s_worked") && (this.$("t_s_worked").innerHTML = zh
       ? '✏️ <b>計算示例（月薪 HK$26,000）：</b>年收入 312,000 − MPF 15,600 − 免稅額 132,000 = 應課稅入息 164,400。稅階：50,000×2% + 50,000×6% + 50,000×10% + 14,400×14% = 1,000 + 3,000 + 5,000 + 2,016 = <b>HK$11,016/年（HK$918/月）</b>，低於標準稅率 44,460，故用累進制。'
       : '✏️ <b>Worked example (HK$26,000/mo):</b> annual 312,000 − MPF 15,600 − allowance 132,000 = chargeable 164,400. Bands: 50,000×2% + 50,000×6% + 50,000×10% + 14,400×14% = 1,000 + 3,000 + 5,000 + 2,016 = <b>HK$11,016/yr (HK$918/mo)</b>; lower than the 44,460 standard-rate figure, so progressive applies.');
@@ -1288,6 +1295,9 @@ function computePay() {
   UI.$("v_mpf").textContent = "− " + UI.fmt(slip.mpf);
   UI.$("v_mpfEr").textContent = "+ " + UI.fmt(slip.mpfEr);
   UI.$("v_taxM").textContent = "− " + UI.fmt(slip.taxM);
+  UI.$("v_eff").textContent = slip.gross > 0
+    ? (slip.annualTax / (slip.gross * slip.months) * 100).toFixed(slip.annualTax / (slip.gross * slip.months) < 0.1 ? 2 : 1) + "%"
+    : "0%";
   UI.$("v_net").textContent = UI.fmt(slip.net);
   STATE.data.salary = slip.gross; STATE.data._net = slip.net;
   renderTaxAdv(slip, opts);
@@ -1627,6 +1637,21 @@ function renderModelCard(zh) {
   UI.$("t_mlNote").textContent = (zh
     ? "模型：字符二元語法（中英雙語）樸素貝葉斯。訓練語料 " + ML.CORPUS.length + " 條（" + scam + " 詐騙 / " + legit + " 正常），全部喺下面公開。驗證：留一法交叉驗證（LOO-CV）。唔會有任何訊息離開你部手機。"
     : "Model: character-bigram (bilingual zh/en) Naive Bayes. Corpus of " + ML.CORPUS.length + " messages (" + scam + " scam / " + legit + " legitimate), fully published below. Validation: leave-one-out cross-validation. No message ever leaves your device.");
+  /* confusion matrix (LOO-CV) — full transparency on both classes */
+  const cm = UI.$("mlConfusion");
+  if (cm) {
+    const hdr = zh ? ["", "預測：詐騙", "預測：正常"] : ["", "Predicted scam", "Predicted legit"];
+    const r1 = zh ? ["實際：詐騙", "真陽性 TP", "假陰性 FN"] : ["Actual scam", "True pos (TP)", "False neg (FN)"];
+    const r2 = zh ? ["實際：正常", "假陽性 FP", "真陰性 TN"] : ["Actual legit", "False pos (FP)", "True neg (TN)"];
+    const cap = zh ? "混淆矩陣（LOO-CV，73 條全部計入）" : "Confusion matrix (LOO-CV, all 73 messages)";
+    cm.innerHTML =
+      '<div class="sub" style="margin-top:4px">' + cap + "</div>" +
+      '<table style="width:100%;border-collapse:collapse;margin-top:6px;font-size:12px">' +
+      "<tr>" + hdr.map((h, i) => '<th style="border:1px solid #d8cfae;padding:4px 6px;text-align:' + (i ? "center" : "left") + ';background:#f5efdc">' + h + "</th>").join("") + "</tr>" +
+      "<tr>" + r1.map((c, i) => '<td style="border:1px solid #d8cfae;padding:4px 6px;text-align:' + (i ? "center" : "left") + '">' + (i ? "<b>" + cv.tp + "</b> " + c : c) + "</td>").join("") + "</tr>" +
+      "<tr>" + r2.map((c, i) => '<td style="border:1px solid #d8cfae;padding:4px 6px;text-align:' + (i ? "center" : "left") + '">' + (i ? "<b>" + cv.fp + "</b> " + c : c) + "</td>").join("") + "</tr>" +
+      "</table>";
+  }
   // publish the full corpus — every message the model was trained on
   const cl = UI.$("corpusList");
   if (cl) {
