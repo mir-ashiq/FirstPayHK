@@ -8,7 +8,7 @@ A mobile-first web app for final-year Hong Kong students facing their **first pa
 
 ## 🔗 Live demo
 
-**👉 <https://USERNAME.github.io/FirstPayHK/>**
+**👉 <https://mir-ashiq.github.io/FirstPayHK/>**
 
 Hosted free on GitHub Pages — same code as `index.html` in this repo. Open it on your phone; everything (tax engine, Scam Shield, charts) runs locally in your browser. Works offline after first load.
 
