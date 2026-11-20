@@ -2,6 +2,8 @@
 
 Copy-paste-ready sections for the Devpost form (~200 words each, as required).
 
+**Live demo:** <https://USERNAME.github.io/FirstPayHK/> · **Repo:** <https://github.com/USERNAME/FirstPayHK> (public)
+
 ---
 
 ## Problem Introduction (~200 words)

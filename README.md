@@ -6,6 +6,21 @@ A mobile-first web app for final-year Hong Kong students facing their **first pa
 
 > Everything runs in **one self-contained HTML file**. No build step, no backend, no API keys, no tracking. Open `index.html` and it works — even offline after first load.
 
+## 🔗 Live demo
+
+**👉 <https://USERNAME.github.io/FirstPayHK/>**
+
+Hosted free on GitHub Pages — same code as `index.html` in this repo. Open it on your phone; everything (tax engine, Scam Shield, charts) runs locally in your browser. Works offline after first load.
+
+| Screen | Preview |
+|---|---|
+| Home — 90-day journey | ![Home](docs/screenshots/screenshot_home.png) |
+| Pay — payslip + worked example | ![Pay](docs/screenshots/screenshot_pay.png) |
+| Shield — hybrid risk check | ![Shield](docs/screenshots/screenshot_shield.png) |
+| Runway — emergency fund | ![Runway](docs/screenshots/screenshot_runway.png) |
+| Stress tests (EN) | ![Stress](docs/screenshots/screenshot_stress_en.png) |
+| ML model card | ![Model card](docs/screenshots/screenshot_modelcard.png) |
+
 ---
 
 ## Quick start
@@ -58,7 +73,23 @@ index.html
 └── UI       — rendering, journey, navigation
 ```
 
-**Self-tests run on every load** (`window.__SELFTEST__` in the console): tax engine against IRD-verified cases (2025/26 and 2026/27, bonus, deductions, joint assessment, two-tier standard rate), shield engine against the 5 worked examples, ML LOO-CV quality gate. **52/52 automated E2E checks pass** (navigation, tax v2 math, stress scenarios, hybrid shield + model card + published corpus, ledger, check-in, i18n, persistence). Expected values cross-checked against an independent Python reference implementation (`scripts/tax_reference.py` in the build repo).
+**Self-tests run on every load** (`window.__SELFTEST__` in the console): tax engine against IRD-verified cases (2025/26 and 2026/27, bonus, deductions, joint assessment, two-tier standard rate), shield engine against the 5 worked examples, ML LOO-CV quality gate. **52/52 automated E2E checks pass** (navigation, tax v2 math, stress scenarios, hybrid shield + model card + published corpus, ledger, check-in, i18n, persistence). Expected values cross-checked against an independent Python reference implementation ([`reference/tax_reference.py`](reference/tax_reference.py)). Run them yourself:
+
+```sh
+pip install playwright && playwright install chromium
+python3 tests/run_e2e.py
+```
+
+## Repo layout
+
+```
+index.html              ← the whole app (open it / deployed by GitHub Pages)
+docs/screenshots/       ← the six screenshots above
+tests/run_e2e.py        ← Playwright runner for the 52-check E2E suite
+tests/e2e_test.js       ← the suite itself (runs in-page, no deps)
+reference/tax_reference.py  ← independent Python tax reference used to verify the JS engine
+SUBMISSION.md           ← Devpost submission kit + 5-min demo video script
+```
 
 ## Data & assumptions
 
